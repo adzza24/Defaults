@@ -1,0 +1,24 @@
+{
+  "name": "msd_umbraco_portal",
+  "version": "1.0.0",
+  "description": "npm for msd umbraco solution",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "compass": "^0.1.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-compass": "^2.1.0",
+    "gulp-compass-compile": "^1.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-imagemin": "^3.0.2",
+    "gulp-minify": "0.0.13",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Anthony",
+  "license": "ISC"
+}
