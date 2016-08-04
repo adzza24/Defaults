@@ -1,0 +1,13 @@
+﻿<div ng-controller="AUMBRA.GridEditors.MacroController">
+    <div class="usky-editor-placeholder" ng-click="setMacro()">
+        <div ng-if="!preview">
+            <i class="icon icon-settings-alt"></i>
+            <div class="help-text">{{title}}</div>
+        </div>
+        <div ng-if="preview">
+            <div ng-if="preview" style="text-align: left"
+                 ng-bind-html-unsafe="preview">
+            </div>
+        </div>
+    </div>
+</div>

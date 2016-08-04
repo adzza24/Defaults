@@ -1,0 +1,36 @@
+﻿<div ng-controller="AUMBRA.GridEditors.ReferencesController" class="ref-controller aumbra">
+    <div style="margin-bottom:30px;">
+        <table>
+            <thead>
+                <tr class="header-row">
+                    <th>Symbol</th>
+                    <th>{{control.editor.config.name}}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="container-fluid" ui-sortable ng-model="references">
+                <tr ng-repeat="reference in references" class="row icon icon-navigation handle">
+                    <td class="symbol">
+                        <input ng-model="reference.symbol" type="text" />
+                    </td>
+                    <td>
+                        <div unique-id="reference.id"
+                             value="reference.text"
+                             grid-rte configuration="config.rte">
+                        </div>
+                    </td>
+                    <td>
+                        <a ng-if="references.length > 1" style="margin-left:20px; display:inline-block;" class="btn btn-danger" ng-click="deleteReference($index)">Delete reference</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="container-fluid" ng-show="references.length">
+            <div class="row">
+                <a class="btn" ng-click="addNewReference()">Add</a>
+            </div>
+        </div>
+
+    </div>
+</div>

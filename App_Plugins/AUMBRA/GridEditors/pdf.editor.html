@@ -1,0 +1,29 @@
+﻿<div ng-controller="AUMBRA.GridEditors.PdfController" class="umb-editor pdf-controller">
+
+    <ul class="container" ng-model="renderModel">
+        <li class="col-6">
+            <img src="/Images/Site/icon-pdf.png" alt="" />
+            <h1>{{renderModel[0].name}}</h1>
+        </li>
+        <li class="col-6">
+            <a href ng-click="openContentPicker()" prevent-default class="btn btn-accept">
+                <i class="icon icon-add blue"></i>
+                Change
+            </a>
+        </li>
+        <li class="col-6 right">
+            <input type="text" ng-model="caption" style="width:100%; max-width:500px;" />
+        </li>
+    </ul>
+
+    <ul class="unstyled list-icons" ng-if="renderModel.length == 0">
+        <li>
+            <i class="icon icon-add blue"></i>
+            <a href ng-click="openContentPicker()" prevent-default>
+                <localize key="general_add">Add</localize>
+            </a>
+        </li>
+    </ul>
+
+    
+</div>

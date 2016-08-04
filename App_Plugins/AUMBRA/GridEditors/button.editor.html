@@ -1,0 +1,14 @@
+﻿<div class="button-controller aumbra container" ng-controller="AUMBRA.GridEditors.Button">
+    <div class="btn">
+        <input ng-model="control.value.text" type="text">
+        <span>{{control.value.text}}</span>
+    </div>
+
+    <ul class="link">
+        <li ng-repeat="url in urls">
+            <a class="btn" ng-class="url.selected && 'active'" ng-click="ctrl($index)" ng-model="url.link" ng-hide="url.selected && url.showinput">
+                {{url.link == "" ? url.defaultText : url.link}}
+            </a>
+            <input type="text" ng-model="url.link" class="btn" ng-class="url.selected && 'active'" ng-show="url.selected && url.showinput" /></li>
+    </ul>
+</div>

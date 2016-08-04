@@ -1,0 +1,20 @@
+﻿<div ng-controller="AUMBRA.FormFieldsController" class="forms-fields aumbra">
+    <div style="margin-bottom:30px;">
+        <ul class="container">
+            <li ng-repeat="field in model.config.fields" class="col-12">
+                <label for="{{model.alias}}_{{field.alias}}" class="{{field.alias}}">
+                    <span>{{field.value}}</span>
+                    <input id="{{model.alias}}_{{field.alias}}" ng-model="model.value[field.alias]" type="text" />
+                    <div class="error-box">You do not have permission to edit this field.</div>
+                </label>
+            </li>
+            <li class="col-12">
+                <label for="{{model.alias}}_required">
+                    <span>Required?</span>
+                    <input id="{{model.alias}}_required" type="checkbox" ng-model="model.value.Required" />
+                </label>
+            </li>
+        </ul>
+
+    </div>
+</div>

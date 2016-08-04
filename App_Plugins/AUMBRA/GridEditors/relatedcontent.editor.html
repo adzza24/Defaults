@@ -1,0 +1,22 @@
+﻿<div ng-controller="AUMBRA.GridEditors.RelatedContent" class="umb-contentpicker aumbra relatedcontent">
+
+    <ul class="container" style="text-align:left;" ng-model="renderModel" ui-sortable>
+        <li ng-repeat="item in renderModel" class="node col-4">
+            <div class="inner" ng-if="item.id" ng-style="{'background-image': 'url(' + item.img.src + ')'}">
+                <h3 ng-bind-html="item.Content.title.value" ng-if="item.Content.title.value"></h3>
+                <h3 ng-if="!item.Content.title.value">{{item.name}}</h3>
+                <div class="btn-container">
+                    <a class="btn" prevent-default ng-click="remove($index)"><localize key="general_delete">Remove</localize></a>
+                    <a class="btn" prevent-default ng-click="openContentPicker($index)">Change</a>
+                </div>
+                <p ng-bind-html="item.Content.textArea.value" ng-if="item.Content.textArea.value"></p>
+                    
+            </div>
+            <div class="unstyled list-icons empty" ng-if="!item.id">
+                <a href ng-click="openContentPicker($index)" prevent-default class="usky-editor-placeholder">
+                    <localize key="general_add">Add</localize>
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>

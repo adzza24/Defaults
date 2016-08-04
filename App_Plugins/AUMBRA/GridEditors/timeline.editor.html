@@ -1,0 +1,21 @@
+﻿<div class="umb-editor aumbra timeline" ng-controller="AUMBRA.GridEditors.Timeline">
+
+    <div class="timeline-item" ng-model="newItem">
+        <h4><input ng-model="newItem.title" /></h4>
+        <p unique-id="newItem.$uniqueId"
+           value="newItem.text"
+           grid-rte configuration="control.editor.config.rte">
+        </p>
+        <a class="btn" ng-click="add()" ng-if="editing || newItem.valid">{{editing ? 'Save' : 'Add'}}</a>
+        <a class="btn" ng-click="cancel()" ng-if="editing">Cancel</a>
+    </div>
+
+    <ul class="timeline" ng-model="timeline" ui-sortable>
+        <li class="timeline-item" ng-repeat="item in timeline" ng-class="editing && newItem.index === item.index && 'editing'">
+            <h4>{{item.title}}</h4>
+            <p ng-bind-html="item.text"></p>
+            <a class="btn icon icon-edit" ng-click="edit($index)">Edit</a>
+            <a class="btn btn-danger" ng-click="remove($index)" ng-if="!editing">Delete</a>
+        </li>
+    </ul>
+</div>

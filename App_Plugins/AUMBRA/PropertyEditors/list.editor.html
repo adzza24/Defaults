@@ -1,0 +1,41 @@
+﻿
+<style>
+
+    .list-controller li { list-style:none; margin-bottom:20px; padding-left:30px; margin-left:-30px; width:95%; background:#fff; -moz-transition:all 0.8s; -o-transition:all 0.8s; -webkit-transition:all 0.8s; transition:all 0.8s; opacity:1; }
+    .list-controller li * { font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }
+    .list-controller li:before { display:block; position:relative; left:-15px; top:15px; cursor:all-scroll; }
+    
+    .list-controller input[type=text] { width:100%; float:right; height:auto; }
+
+    .list-controller li span { padding-left:10px; }
+
+    .list-controller .ui-sortable-helper { box-shadow:2px 2px 8px rgba(0, 0, 0, 0.5); padding:10px 10px 10px 30px; z-index:1000; opacity:0.6; border-radius:5px; -moz-transition:opacity 0.8s; -o-transition:opacity 0.8s; -webkit-transition:opacity 0.8s; transition:opacity 0.8s; }
+    .list-controller .ui-sortable-placeholder { border:1px dashed #ccc; background:#eee; display:block; visibility:visible!important; padding:10px 15px 10px 30px; position:relative; left:-30px; height:33px; border-radius:5px; -moz-transition:all 0.8s; -o-transition:all 0.8s; -webkit-transition:all 0.8s; transition:all 0.8s; }
+        .list-controller .ui-sortable-placeholder:after, .list-controller .ui-sortable-placeholder:before { content:""; }
+
+
+</style>
+
+
+<div ng-controller="AUMBRA.ListController" class="list-controller">
+
+
+    <div style="margin-bottom:30px;">
+
+        <ul class="container-fluid" ui-sortable ng-model="rows">
+            <li ng-repeat="row in rows" class="row icon icon-navigation handle">
+                <span ng-repeat="col in row" ng-class="config.columnWidth"><input ng-model="col.value" type="text" /></span>
+                <span ng-class="'span' + 2" style="text-align:right;">
+                    <a style="margin-left:20px; display:inline-block;" class="btn btn-danger" ng-click="deleteRow($index)">Delete</a>
+                </span>
+            </li>
+        </ul>
+
+        <div class="container-fluid" ng-show="config.maxNumber == 0 || config.maxNumber > rows.length">
+            <div class="row">
+                <a class="btn" ng-click="addNewRow()">Add</a>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,13 @@
+﻿
+<div ng-controller="AUMBRA.LocationController">
+    <dl>
+        <dt style="display:inline-block; min-width:80px; padding:3px 10px 0 0;">Latitude:</dt>
+        <dd style="display:inline-block;"><input ng-model=" model.value.lat" ng-change="updateMap()" /></dd>
+        <br />
+        <dt style="display:inline-block; min-width:80px; padding:3px 10px 0 0;">Longitude:</dt>
+        <dd style="display:inline-block;"><input ng-model="model.value.lng" ng-change="updateMap()" /></dd>
+    </dl>
+
+    <div id="map" style="height:300px;"></div>
+
+</div>

@@ -1,0 +1,9 @@
+﻿<div ng-controller="AUMBRA.RefereesController">
+    <h3 ng-show="referees.length">This module is currently in use in the following pages:</h3>
+    <h3 ng-hide="referees.length">This module is not currently in use.</h3>
+    <ul>
+        <li ng-repeat="referee in referees track by $index">
+            <a href="#/content/content/edit/{{referee.id}}" target="_blank">{{referee.name}}</a>
+        </li>
+    </ul>
+</div>

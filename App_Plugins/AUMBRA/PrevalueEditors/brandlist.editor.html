@@ -1,0 +1,34 @@
+<div class="umb-editor" ng-controller="AUMBRA.PrevalueEditors.MultiValuesController">
+    <div class="control-group">
+        <table>
+            <thead>
+                <tr>
+                    <th align="left">Brand Name</th>
+                    <th align="left">Primary Colour</th>
+                    <th align="left">Secondary Colour</th>
+                    <th align="left">Third Colour</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding-right:3px;"><input name="newItem" type="text" ng-model="newItem.name" val-highlight="hasError" /></td>
+                    <td style="padding-right:3px;"><input name="newItem" type="text" ng-model="newItem.colors.primary" val-highlight="hasError" /></td>
+                    <td style="padding-right:3px;"><input name="newItem" type="text" ng-model="newItem.colors.secondary" val-highlight="hasError" /></td>
+                    <td style="padding-right:3px;"><input name="newItem" type="text" ng-model="newItem.colors.third" /></td>
+                    <td align="right"><button class="btn btn-small" ng-click="add($event)">Add</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ui-sortable="sortableOptions" ng-model="model.value">
+        <div class="control-group" ng-repeat="item in model.value" style="margin-left:-17px;">
+            <i class="icon icon-navigation handle"></i>
+            <input type="text" ng-model="item.name" class="model-name" val-server="item_{{$index}}" required />
+            <input type="text" ng-model="item.colors.primary" val-server="item_{{$index}}" required />
+            <input type="text" ng-model="item.colors.secondary" val-server="item_{{$index}}" required />
+            <input type="text" ng-model="item.colors.third" val-server="item_{{$index}}" />
+            <button class="btn btn-small btn-danger" ng-click="remove(item, $event)">Remove</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,457 @@
+﻿{
+    "propertyEditors": [
+        {
+            "alias": "CharLimit",
+            "name": "Char Limit",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/charlimit.editor.html"
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "description": "Enter a number of character to limit on",
+                        "key": "limit",
+                        "label": "Limit",
+                        "view": "number"
+                    }
+                ]
+            }
+        },
+        {
+            "alias": "Aumbra.Tags",
+            "name": "Tags (update-able)",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/tags.editor.html"
+            },
+            "prevalues": { 
+                "fields": [
+                    {
+                        "view": "textstring",
+                        "key": "group",
+                        "description": "Define a tag group",
+                        "label": "Tag Group"
+                    },
+                    {
+                        "view": "/umbraco/views/propertyeditors/tags/tags.prevalues.html",
+                        "key": "storageType",
+                        "description": "Select whether to store the tags in cache as CSV (default) or as JSON. The only benefits of storage as JSON is that you are able to have commas in a tag value but this will require parsing the json in your views or using a property value converter",
+                        "label": "Storage Type"
+                    }
+                ]
+            }
+        },
+        {
+            "alias": "FormField",
+            "name": "Form Field",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/formfields.editor.html",
+                "valueType": "JSON"
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "key": "fields",
+                        "description": "What properties should your forms field have?",
+                        "label": "Fields",
+                        "view": "multivalues"
+                    }
+                ]
+            }
+        },
+
+        {
+            "alias": "Location",
+            "name": "Location",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/location.editor.html",
+                "valueType": "JSON"
+            }
+        },
+        {
+            "alias": "TreePicker",
+            "name": "Tree Picker with Preview",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/treepicker.editor.html",
+                "valueType": "JSON"
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "description": "Enter a label for the button",
+                        "key": "btnLabel",
+                        "label": "Button Label",
+                        "view": "textstring"
+                    },
+                    {
+                        "description": "Select a startnode",
+                        "key": "startNodeId",
+                        "label": "Start Node ID",
+                        "view": "treepicker"
+                    },
+                    {
+                        "view": "boolean",
+                        "key": "multiPicker",
+                        "label": "Multi node picker?",
+                        "description": "If checked, you will be able to select multiple nodes"
+                    }
+
+                ]
+            }
+        },
+        {
+            "alias": "specialtyPicker",
+            "name": "Specialty Picker",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/specialtypicker.editor.html",
+                "valueType": "JSON"
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "view": "boolean",
+                        "key": "multiPicker",
+                        "label": "Multi node picker?",
+                        "description": "If checked, you will be able to select multiple nodes"
+                    }
+
+                ]
+            }
+        },
+        {
+            "alias": "ClassTypePicker",
+            "name": "Class Type Picker",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/classtypepicker.editor.html",
+                "valueType": "JSON",
+                "hideLabel": true
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "description": "Enter a label for the button",
+                        "key": "btnLabel",
+                        "label": "Button Label",
+                        "view": "textstring"
+                    },
+                    {
+                        "description": "Select a startnode",
+                        "key": "startNodeId",
+                        "label": "Start Node ID",
+                        "view": "treepicker"
+                    }
+
+                ]
+            }
+        },
+        {
+            "alias": "List",
+            "name": "List",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/list.editor.html",
+                "valueType": "JSON"
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "description": "Enter a number of columns to display in the list",
+                        "key": "columnNumber",
+                        "label": "Number of Columns",
+                        "view": "number"
+                    },
+                    {
+                        "description": "Set the maximum number of list items",
+                        "key": "maxNumber",
+                        "label": "Max items",
+                        "view": "number"
+                    }
+
+                ]
+            }
+        },
+        {
+            "alias": "Referees List",
+            "name": "Referees",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/referees.editor.html",
+                "hideLabel": true
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "description": "Choose a node where all the referring content will reside. Leave blank to set as the site root by default.",
+                        "key": "startNode",
+                        "label": "Start Node",
+                        "view": "treesource"
+                    }
+                ]
+            }
+        },
+        {
+            "alias": "PDFPreviewer",
+            "name": "PDF Previewer",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/pdfpreviewer.editor.html",
+                "hideLabel": true,
+                "isReadOnly": true
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "description": "A template to be used to render the PDF",
+                        "key": "template",
+                        "label": "Template",
+                        "view": "textstring"
+                    },
+                    {
+                        "description": "Label to be displayed on the preview button",
+                        "key": "label",
+                        "label": "Label",
+                        "view": "textstring"
+                    }
+                ]
+            }
+        },
+        {
+            "alias": "brandPicker",
+            "name": "Brand Picker",
+            "editor": {
+                "view": "~/App_Plugins/AUMBRA/PropertyEditors/brandpicker.editor.html",
+                "hideLabel": false,
+                "isReadOnly": false,
+                "valueType": "JSON"
+            },
+            "prevalues": {
+                "fields": [
+                    {
+                        "description": "Name of the brand and associated colour",
+                        "key": "brandList",
+                        "label": "Brand List",
+                        "view": "~/App_Plugins/AUMBRA/PrevalueEditors/brandlist.editor.html"
+                    }
+                ]
+            }
+        }
+    ],
+    "gridEditors": [
+        {
+            "alias": "multiNodePicker",
+            "name": "Multi Node Picker",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/multinodepicker.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/MultiNodePicker.cshtml",
+            "icon": "icon-nodes",
+            "config": {
+                "multiPicker": true
+            }
+        },
+        {
+            "alias": "button",
+            "name": "Insert Button",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/button.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Button.cshtml",
+            "icon": "icon-whhg-squareapp",
+            "config": {
+                "multiPicker": true
+            }
+        },
+        {
+            "alias": "Aumbra.Poll",
+            "name": "Poll",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/poll.editor.html",
+            "render": "macro",
+            "icon": "icon-poll",
+            "config": {
+                "macroAlias": "Poll",
+                "macroTitle": "Click to insert a Poll"
+            }
+        },
+        {
+            "alias": "ModulePicker",
+            "name": "Module Picker",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/modulepicker.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Module.cshtml",
+            "icon": "icon-nodes",
+            "config": {
+                "filter": "Module",
+                "multiPicker": false,
+                "startNode": {
+                    "query": "$site/ModuleGroup",
+                    "type": "content",
+                    "id": -1
+                }
+            }
+        },
+        {
+            "alias": "Aumbra.LinkedModulePicker",
+            "name": "Linked Module Picker (with background)",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/linkedmodulepicker.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/LinkedModule.cshtml",
+            "icon": "icon-nodes",
+            "config": {
+                "filter": "Module",
+                "multiPicker": false,
+                "startNode": {
+                    "query": "$site/ModuleGroup",
+                    "type": "content",
+                    "id": -1
+                }
+            }
+        },
+        {
+            "alias": "slider",
+            "name": "Image Slider",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/slider.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Slider.cshtml",
+            "icon": "icon-whhg-images-gallery",
+            "config": {
+                "multiPicker": true,
+                "preview": false,
+                "size": {
+                    "width": 762,
+                    "height": 429
+                }
+            }
+        },
+        {
+            "alias": "sliderpreview",
+            "name": "Image Slider with Thumbnails",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/slider.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/SliderPreview.cshtml",
+            "icon": "icon-thumbnails",
+            "config": {
+                "multiPicker": true,
+                "preview": true,
+                "size": {
+                    "width": 762,
+                    "height": 429
+                }
+            }
+        },
+        {
+            "alias": "video",
+            "name": "Video",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/video.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Video.cshtml",
+            "icon": "icon-whhg-squareplay",
+            "config": {
+                "multi": false
+            }
+        },
+        {
+            "alias": "multivideo",
+            "name": "Multi Video",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/video.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Video.cshtml",
+            "icon": "icon-gmd-collection-video",
+            "config": {
+                "multi": true
+            }
+        },
+        {
+            "alias": "relatedContent",
+            "name": "Related Content",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/relatedcontent.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/RelatedContent.cshtml",
+            "icon": "icon-link",
+            "config": {
+                "filter": "",
+                "multiPicker": false,
+                "startNode": {
+                    "query": "$site/SiloGroup",
+                    "type": "content",
+                    "id": -1
+                }
+            }
+        },
+        {
+            "alias": "references",
+            "name": "References",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/references.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/References.cshtml",
+            "icon": "icon-whhg-commenttyping",
+            "config": {
+                "name": "References"
+            }
+        },
+        {
+            "alias": "abbreviations",
+            "name": "Abbreviations",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/references.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/References.cshtml",
+            "icon": "icon-whhg-handpinch",
+            "config": {
+                "name": "Abbreviations"
+            }
+        },
+        {
+            "alias": "timeline",
+            "name": "Timeline",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/timeline.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Timeline.cshtml",
+            "icon": "icon-whhg-timeline"
+        },
+        {
+            "alias": "quotetext",
+            "name": "Quote Text",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/quote.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Quote.cshtml",
+            "icon": "icon-quote"
+        },
+        {
+            "alias": "table",
+            "name": "Table",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/table.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/Table.cshtml",
+            "icon": "icon-forms-table"
+        },
+        {
+            "alias": "pdf",
+            "name": "PDF",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/pdf.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/pdf.cshtml",
+            "icon": "icon-forms-file-pdf"
+        },
+        {
+            "alias": "graph",
+            "name": "Graph",
+            "view": "~/App_Plugins/AUMBRA/GridEditors/graph.editor.html",
+            "render": "~/Views/Partials/Grid/Editors/AUMBRA/graph.cshtml",
+            "icon": "icon-chart-curve"
+        }
+    ],
+
+    "javascript": [
+        "http://csp.screen9.com/js/ps.js",
+        "~/App_Plugins/AUMBRA/Controllers/search.controller.js",
+        "~/App_Plugins/AUMBRA/Services/mce.service.js",
+        "~/App_Plugins/AUMBRA/Services/validate.service.js",
+        "~/App_Plugins/AUMBRA/Services/video.service.js",
+        "~/App_Plugins/AUMBRA/Services/util.service.js",
+        "~/App_Plugins/AUMBRA/Services/ajax.service.js",
+        "~/App_Plugins/AUMBRA/Directives/sticky.directive.js",
+        "~/App_Plugins/AUMBRA/GridEditors/multinodepicker.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/modulepicker.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/video.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/macro.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/slider.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/graph.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/timeline.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/relatedcontent.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/quote.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/table.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/button.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/pdf.controller.js",
+        "~/App_Plugins/AUMBRA/GridEditors/references.controller.js",
+        "~/App_Plugins/AUMBRA/PrevalueEditors/brandlist.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/brandpicker.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/formfields.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/tags.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/specialtypicker.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/pdfpreviewer.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/referees.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/charlimit.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/location.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/list.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/treepicker.controller.js",
+        "~/App_Plugins/AUMBRA/PropertyEditors/classtypepicker.controller.js"
+    ]
+}

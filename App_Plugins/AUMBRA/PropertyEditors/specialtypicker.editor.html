@@ -1,0 +1,18 @@
+﻿<style type="text/css">
+    .specialty-picker { }
+    .specialty-picker ul { margin:0; }
+    .specialty-picker li { opacity:0.5; -moz-transition:all 0.4s; -o-transition:all 0.4s; -webkit-transition:all 0.4s; transition:all 0.4s; }
+    .specialty-picker li:hover { opacity:1; -moz-transition:all 0.1s; -o-transition:all 0.1s; -webkit-transition:all 0.1s; transition:all 0.1s; }
+    .specialty-picker li a { border-radius:5px; border:2px solid #000; font-weight:bold; -moz-transition:all 0.2s; -o-transition:all 0.2s; -webkit-transition:all 0.2s; transition:all 0.2s; display: inline-block; padding:10px 12px; }
+    .specialty-picker li.active { opacity:1; }
+    .specialty-picker li.active a { color:#FFF!important; background-color:#000; }
+    .specialty-picker li.inactive a { background:none!important; }
+
+</style>
+<div ng-controller="AUMBRA.SpecialtyPickerController" class="specialty-picker">
+    <ul>
+        <li ng-repeat="specialty in model.specialties" style="color:#FFF; margin:0 10px 10px 0; cursor:pointer; display:inline-block;" ng-class="specialty.chosen ? 'active' : 'inactive'">
+            <a ng-click="select(specialty)" ng-style="{'color': '{{specialty.colors.primary}}', 'background': '{{specialty.colors.primary}}', 'border-color':'{{specialty.colors.primary}}'}">{{specialty.title}}</a>
+        </li>
+    </ul>
+</div>

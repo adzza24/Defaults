@@ -1,0 +1,86 @@
+﻿<div class="umb-editor aumbra multi-video" ng-controller="AUMBRA.GridEditors.MultiVideo">
+    <form name="newVideoForm" class="url-entry container full" novalidate ng-submit="addVideo()">
+        <div ng-show="config.multi || videos.length < 1">
+            <iframe ng-src="{{newVideo.url}}" width="100%" height="450" ng-if="validUrl"></iframe>
+            <dl class="col-6 alpha">
+                <dt><label for="vid-url">Video Url or ID</label></dt>
+                <dd>
+                    <em ng-if="newVideoForm.url.$error.required && newVideoForm.url.$dirty">This field is required!</em>
+                    <em ng-if="newVideoForm.url.$error.invalidUrl && newVideoForm.url.$dirty">{{newVideoForm.url.$error.invalidUrl}}</em>
+                    <input type="text" id="vid-url" name="url" ng-model="newVideo.url" ng-required="true" ng-class="(newVideoForm.url.$error.required || newVideoForm.url.$error.invalidUrl) && newVideoForm.url.$dirty && 'error'" ng-change="getUrl(newVideo, true)" />
+                </dd>
+
+                <dt><label for="vid-title">Title</label></dt>
+                <dd>
+                    <em ng-if="newVideoForm.title.$error.required && newVideoForm.title.$dirty">This field is required!</em>
+                    <input type="text" name="title" ng-model="newVideo.title" ng-required="true" ng-class="newVideoForm.title.$error.required && newVideoForm.title.$dirty && 'error'" />
+                </dd>
+
+                <dt><label for="vid-length">Length (in minutes)</label></dt>
+                <dd><input type="number" id="vid-length" name="time" ng-model="newVideo.time" /></dd>
+
+                <dt><label for="vid-date">Date of Recording</label></dt>
+                <dd><input type="date" id="vid-date" name="date" ng-model="newVideo.date" /></dd>
+
+                <dt><label for="vid-pub">Publisher</label></dt>
+                <dd><input type="text" id="vid-pub" name="publisher" ng-model="newVideo.publisher" /></dd>
+            </dl>
+            <dl class="col-6 omega">
+                <dt><label>Description</label></dt>
+                <dd ng-class="checkErrors('desc')" ng-if="rteId">
+                    <div unique-id="rteId"
+                         value="newVideo.desc"
+                         grid-rte configuration="config.rte">
+                    </div>
+                </dd>
+                <dd class="right">
+                    <input type="submit" class="btn btn-success icon icon-add left" value="Add" />
+                    <a href ng-click="reset()" class="btn icon icon-train">Clear</a>
+                </dd>
+            </dl>
+        </div>
+    </form>
+    <ul class="thumbnails container" ng-model="videos" ui-sortable>
+        <li class="thumbnail" ng-repeat="video in videos" ng-class="[$index === 0 ? 'col-12' : 'col-6', video.editing && 'editing', $index%2 === 0 && 'no-margin']">
+            <div class="col-12 editable video">
+                <iframe ng-src="{{video.url}}" width="100%"></iframe>
+                <textarea ng-model="video.url" ng-change="getUrl(video)" class="editor"></textarea>
+            </div>
+            <div class="col-12">
+                <h2 class="editable">
+                    <span>{{video.title}}</span>
+                    <textarea ng-model="video.title" class="editor"></textarea>
+                </h2>
+                <div class="iframe-wrapper">
+                    <div unique-id="control.$uniqueId + $index"
+                            value="video.desc"
+                            grid-rte configuration="config.rte">
+                    </div>
+                </div>
+                <p>
+                    Publisher:
+                    <span class="editable">
+                        <span>{{video.publisher}}</span>
+                        <input ng-model="video.publisher" class="editor" type="text" />
+                    </span><br />
+                    Recording date:
+                    <span class="editable date">
+                        <span>{{video.date}}</span>
+                        <input ng-model="video.date" class="editor" type="date" />
+                    </span><br />
+                    Film length:
+                    <span class="editable">
+                        <span>{{video.time}}</span>
+                        <input ng-model="video.time" class="editor" type="number" />
+                    </span> minut.
+                </p>
+            </div>
+            <div class="button-row col-12">
+                <a class="btn icon icon-delete" ng-click="removeVideo($index)" title="Delete this video from the list">Remove</a>
+                <a class="btn icon icon-navigation" ng-if="control.editor.config.multi" title="click and drag">Move</a>
+                <a class="btn icon icon-edit" ng-click="editVideo($index)" ng-hide="video.editing">Edit all</a>
+                <a class="btn btn-success" ng-click="editVideo($index)" ng-show="video.editing">Done</a>
+            </div>
+        </li>
+    </ul>
+</div>

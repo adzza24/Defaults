@@ -1,0 +1,19 @@
+﻿<div ng-controller="AUMBRA.GridEditors.ModulePicker" class="umb-contentpicker aumbra modulepicker">
+    <ul class="module linked-modules" ng-model="renderModel" style="background:#f2f3f4; padding:20px;">
+        <li ng-repeat="node in renderModel" class="node">
+            <div class="inner">
+                <div class="btn-container" ng-sticky>
+                    <a class="btn" target="_blank" href="#/content/content/edit/{{node.id}}">Edit &rdquo;{{node.name}}&ldquo; Module</a>
+                    <a href class="btn btn-danger" prevent-default ng-click="remove($index)"><localize key="general_delete">Remove</localize></a>
+                </div>
+                <iframe ng-src="{{node.previewUrl}}" width="100%" height="500px" id="{{control.$uniqueId + node.id}}"></iframe>
+                <div class="after"></div>
+            </div>
+        </li>
+    </ul>
+    <div class="unstyled list-icons empty" style="padding-top:20px;">
+        <a href ng-click="openContentPicker()" prevent-default class="usky-editor-placeholder">
+            <localize key="general_add">Add</localize>
+        </a>
+    </div>
+</div>

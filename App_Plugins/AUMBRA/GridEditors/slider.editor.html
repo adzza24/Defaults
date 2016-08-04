@@ -1,0 +1,30 @@
+﻿<div class="umb-editor aumbra slider" ng-controller="AUMBRA.GridEditors.Slider">
+    <div class="">
+        <a ng-click="addImage(true)" class="btn add">Add Image</a>
+        <a ng-click="clearAll()" class="btn clearAll" ng-if="control.value.length > 1">Clear All</a>
+        <ul ng-model="control.value" ui-sortable style="display:block;">
+            <li ng-repeat="image in control.value">
+                <div ng-if="control.editor.config.preview">
+                    <span>Title:</span>
+                    <input type="text" ng-model="image.title" placeholder="title" ng-if="control.editor.config.preview" />
+                </div>
+                <div class="img-wrapper">
+                    <img ng-src="{{image.croppedPath}}" alt="{{image.altText}}" id="{{image.id}}" />
+                    <span class="after"></span>
+                    <a class="btn" ng-click="changeImage($index)">Change Image</a>
+                </div>
+                <div ng-if="control.editor.config.preview">
+                    <span>Caption:</span>
+                    <div unique-id="image.$uniqueId"
+                         value="image.caption"
+                         grid-rte configuration="config.rte">
+                    </div>
+                </div>
+                <a class="btn btn-danger" ng-click="removeImage($index)">Remove</a>
+                <a class="btn icon icon-navigation" ng-click="removeImage($index)">Move</a>
+            </li>
+        </ul>
+        <a ng-click="addImage()" class="btn add" ng-if="control.value.length > 0">Add Image</a>
+        <a ng-click="clearAll()" class="btn clearAll" ng-if="control.value.length > 0">Clear All</a>
+    </div>
+</div>

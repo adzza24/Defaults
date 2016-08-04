@@ -1,0 +1,32 @@
+﻿<div ng-controller="AUMBRA.GridEditors.GraphController" class="umb-editor graph-controller" style="background:#fffbea; padding:20px;">
+
+    <ul class="unstyled list-icons" ng-model="renderModel">
+        <li ng-repeat="node in renderModel">
+            <div class="rte-wrapper title" style="border: 1px solid #ccc;">
+                <div unique-id="control.$uniqueId2"
+                     value="node.heading"
+                     grid-rte configuration="rteconfig">
+                </div>
+            </div>
+            <a href ng-click="openContentPicker()" prevent-default class="graph-link">
+                <img src="{{node.image}}" alt="" />
+            </a>
+        </li>
+    </ul>
+    <ul class="unstyled list-icons" ng-if="!renderModel.length">
+        <li>
+            <i class="icon icon-add blue"></i>
+            <a href ng-click="openContentPicker()" prevent-default>
+                Add graph
+            </a>
+        </li>
+    </ul>
+    <div class="clear"></div>
+    <div class="rte-wrapper" style="border: 1px solid #ccc;">
+        <div unique-id="control.$uniqueId"
+             value="caption"
+             grid-rte configuration="model.config.rte">
+        </div>
+    </div>
+
+</div>

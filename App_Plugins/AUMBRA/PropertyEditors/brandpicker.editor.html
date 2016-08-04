@@ -1,0 +1,20 @@
+﻿
+<style>
+
+    .brand-controller li { list-style:none; margin-bottom:20px; padding-left:30px; margin-left:-30px; width:95%; background:#fff; -moz-transition:all 0.8s; -o-transition:all 0.8s; -webkit-transition:all 0.8s; transition:all 0.8s; opacity:1; }
+
+
+</style>
+
+
+<div ng-controller="AUMBRA.BrandPickerController" class="brand-controller">
+
+
+    <div style="margin-bottom:30px;">
+
+        <select ng-model="brandPicker" ng-change="setBrand(brandPicker)">
+            <option ng-repeat="item in items" ng-selected="brand.name == item.name" value="{{item.name}}">{{item.name}}</option>
+        </select>
+
+    </div>
+</div>

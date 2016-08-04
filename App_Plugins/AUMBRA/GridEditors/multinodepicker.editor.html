@@ -1,0 +1,21 @@
+﻿
+<div ng-controller="AUMBRA.GridEditors.MultiNodePicker" class="umb-editor umb-contentpicker">
+
+    <ul class="unstyled list-icons" style="text-align:left;"
+        ng-model="renderModel">
+        <li ng-repeat="node in renderModel" style="position:relative; min-height:200px; vertical-align:top; width:300px; padding:20px;">
+            <h1 style="position:relative; z-index:1; color:#FFF;">{{node.name}}</h1>
+            <a href prevent-default ng-click="remove($index)" style="color:#FFF; position:relative; z-index:1;"><localize key="general_delete">Remove</localize></a>
+            <div ng-include="node.previewUrl" style="position:absolute; z-index:0; top:0; left:0; height:100%; width:100%;  background-color:#000000; overflow:hidden;"></div>
+        </li>
+    </ul>
+
+    <ul class="unstyled list-icons">
+        <li>
+            <i class="icon icon-add blue"></i>
+            <a href ng-click="openContentPicker()" prevent-default>
+                <localize key="general_add">Add</localize>
+            </a>
+        </li>
+    </ul>
+</div>

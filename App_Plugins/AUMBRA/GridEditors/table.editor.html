@@ -1,0 +1,45 @@
+﻿<div ng-controller="AUMBRA.GridEditors.TableController" class="table-controller aumbra">
+    <div style="margin-bottom:30px;">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+                <tr>
+                    <th ng-repeat="col in rows[0]">
+                        <a style="margin-left:20px; display:inline-block;" class="btn btn-danger" ng-click="deleteColumn($index)">Delete column</a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="header-row">
+                    <td ng-repeat="col in headers[0]">
+                        <input ng-model="col.value" type="text" placeholder="Column heading" />
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody class="container-fluid" ui-sortable ng-model="rows">
+                <tr ng-repeat="row in rows" class="row icon icon-navigation handle">
+                    <td ng-repeat="col in row">
+                        <div unique-id="col.$uniqueId"
+                             value="col.value"
+                             grid-rte configuration="config.rte">
+                        </div>
+                    </td>
+                    <td>
+                        <span style="text-align:right;">
+                            <a style="margin-left:20px; display:inline-block;" class="btn btn-danger" ng-click="deleteRow($index)">Delete row</a>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="container-fluid" ng-show="config.maxNumber == 0 || config.maxNumber > rows.length">
+            <div class="row">
+                <a class="btn" ng-click="addNewRow()">Add row</a>
+                <a class="btn" ng-click="addNewColumn()">Add column</a>
+            </div>
+        </div>
+
+    </div>
+</div>

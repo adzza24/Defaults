@@ -1,0 +1,70 @@
+﻿
+<style>
+    .btn-add { border: 2px dashed #ccc; border-radius: 10px; width: 191px; min-height: 191px; text-align: center; color: #ccc; display: block; font-size: 150px; line-height: 190px; -moz-transition: all 0.2s linear; -o-transition: all 0.2s linear; -webkit-transition: all 0.2s linear; transition: all 0.2s linear; }
+        .btn-add.Secondary { width: 100px; padding: 0 20px; margin: 0 2% 2% 0; float: left; line-height: 125px; min-height: 135px; font-size: 100px; }
+        .btn-add:hover { background: #eee; text-decoration: none; }
+
+    .list-item { position: relative; min-height: 200px; vertical-align: top; width: 191px; padding: 20px; margin: 0 2% 2% 0; float: left; }
+        .list-item.Secondary { min-height: 100px; width: 100px; }
+
+    .classItem { -moz-border-radius: 35px 0 0 0; -webkit-border-radius: 35px; border-radius: 35px 0 0 0; text-align: center; width: 100%; overflow: hidden; margin: 0 auto 0; padding: 15px 0; height:100%; }
+        .classItem h3, .classItem p { color: white; }
+        .classItem h3 { font-size: 2.5rem; line-height: 100%; }
+        .Primary .classItem h3 { margin: 0 0 10px; }
+        .classItem p { margin-bottom: 0; font-size: 1rem; line-height:120%; padding:0 15px; }
+        .classItem img { padding: 0; margin: 0; width: 90px; }
+
+        .Secondary .classItem { padding-top:30px;  }
+        .Secondary .classItem h3 { font-size: 1rem; }
+        .Secondary .classItem p { font-size: 0.6rem; }
+        .Secondary .classItem img { width: 40px; }
+
+    .delete-x { z-index: 1; position: absolute; right: 10px; top: 10px; font-size:2em; border-radius:50%; display:inline-block; padding:0 0 1px 0; vertical-align:middle; width:30px; line-height:30px; text-align:center; border:2px solid transparent; -moz-transition:all 0.2s linear; -o-transition:all 0.2s linear; -webkit-transition:all 0.2s linear; transition:all 0.2s linear; }
+    .list-item .delete-x:not(:hover) { color:#FFF!important; }
+        .list-item:hover .delete-x { margin:0; border:2px solid #FFF; }
+        .delete-x:hover { background:#FFF; text-decoration:none; }
+
+    .Secondary .delete-x { width:22px; line-height:22px; font-size:1.6em; top:5px; right:5px; padding:0; }
+
+
+</style>
+
+
+<div ng-controller="AUMBRA.ClassTypePicker" class="umb-editor umb-contentpicker usky-grid">
+
+
+    <div class="clearfix" style="position:relative; margin-bottom:30px;">
+        <label style="position:absolute; top:0; width:100%;">
+            Primary class type
+        </label>
+        <div style="margin-left: 180px;">
+            <a href ng-click="addPrimary()" ng-if="model.value.Primary.length == 0" class="btn-add Primary" prevent-default>
+                +
+            </a>
+
+            <div ng-repeat="class in model.value.Primary" class="list-item Primary" ng-class="class.className">
+                <div ng-include="class.PreviewUrl" style="position:absolute; z-index:0; top:0; left:0; height:100%; width:100%; overflow:hidden;"></div>
+                <a href prevent-default ng-click="remove($index, model.value.Primary)" class="delete-x">&times;</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="clearfix" style="position:relative;">
+
+        <label style="position:absolute; top:0; width:100%;">
+            Secondary class types
+        </label>
+        <div style="margin-left: 180px;">
+
+            <div ng-repeat="class in model.value.Secondary" class="list-item Secondary" ng-class="class.className" ng-show="class.id != model.value.Primary[0].id">
+                <div ng-include="class.PreviewUrl" style="position:absolute; z-index:0; top:0; left:0; height:100%; width:100%; overflow:hidden;"></div>
+                <a href prevent-default ng-click="remove($index, model.value.Secondary)" class="delete-x">&times;</a>
+            </div>
+
+            <a href ng-click="addSecondary()" class="btn-add Secondary" prevent-default>
+                +
+            </a>
+        </div>
+    </div>
+</div>
