@@ -1,0 +1,8 @@
+﻿/*Partials*/
+@import 'defaults';
+@import 'partials/typography';
+body {
+    font-family: $font-family-main;
+    font-weight: $font-weight-regular;
+    margin-top:125px;
+}

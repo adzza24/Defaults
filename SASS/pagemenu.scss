@@ -1,0 +1,43 @@
+﻿@import "defaults";
+
+.pagemenu-container {
+    .content { margin: 0 auto; padding-left:4%; padding-right:4%; }
+    .menu {
+        .subnav-mob { padding-left:4%; }
+        li {
+            a { padding-left:4%; }
+        }
+    }
+}
+
+$width: 300px;
+
+@include media(tablet) {
+    .pagemenu-container { min-height:100%;
+        .areaNav { position: relative; height: 100%; display: block; width:$width;
+            > .inner {
+                top: 0;
+                height: calc(100vh - 125px);
+                margin-bottom:0;
+                position: relative;
+                @include transition(none);
+                display: block;
+                width:$width;
+                padding:50px 0 20px;
+                > * { padding-left:4%; padding-right:4%; }
+                button {
+                    width:$width; padding:20px 10px; bottom:0; left:0; position:absolute; @include horizontal-gradient($clr-purple-light, $clr-purple-dark); color:#FFF; border:none;
+                }
+            }
+        }
+        .specialism { float: right; margin-top: -10px; padding:0 4% 0 0; }
+        &.scrolled {
+            .areaNav { float: none; position: absolute;
+                > .inner { position: fixed; top:0; margin-top: 125px;
+                    &.page-bottom { bottom: 0; position: absolute; top: auto; }
+                }
+            }
+            .specialism { max-width: 100%; }
+        }
+    }
+}

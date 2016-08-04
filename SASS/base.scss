@@ -1,0 +1,200 @@
+﻿@import "defaults";
+$default-padding: 20px;
+$sides: "top", "left", "right", "bottom";
+
+
+.padding-default {
+    padding: 15px 15px 10px !important;
+    @include media(tablet) { padding: $default-padding $default-padding 15px !important; }
+}
+
+//no padding/margin
+.padding-none { padding:0 !important; }
+.margin-none { margin:0 !important; }
+//mob
+.padding-none-m { @include media(mobile) { padding:0 !important; } }
+.margin-none-m {
+    @include media(mobile) { margin: 0 !important; }
+}
+//tab
+.padding-none-t {
+    @include media(tablet) { padding: 0 !important; }
+}
+.margin-none-t {
+    @include media(tablet) { margin: 0 !important; }
+}
+//desk
+.padding-none-d {
+    @include media(desktop) { padding: 0 !important; }
+}
+.margin-none-d {
+    @include media(desktop) { margin: 0 !important; }
+}
+
+
+.padding-vert {
+    padding-top: $default-padding;
+    padding-bottom: $default-padding;
+    @include media(tablet) { padding-top: $default-padding*2.5; padding-bottom: $default-padding*3; }
+}
+
+@each $side in $sides {
+    //base
+    .padding-#{$side} { padding-#{$side}: $default-padding !important; }
+    .padding-small-#{$side} { padding-#{$side}: ($default-padding /2) !important; }
+    .padding-large-#{$side} { padding-#{$side}: ($default-padding *2) !important; }
+
+    .padding-extra-large-#{$side} {
+        padding-#{$side}: $default-padding;
+        @include media(tablet) { padding-#{$side}: $default-padding*3; }
+    }
+    //mob
+    .padding-#{$side}-m {
+        padding-#{$side}: $default-padding !important;
+        @include media(tablet) { padding-#{$side}: 0 !important; }
+    }
+
+    .padding-large-#{$side}-m {
+        padding-#{$side}: ($default-padding *2) !important;
+        @include media(tablet) { padding-#{$side}: 0 !important; }
+    }
+
+    .padding-small-#{$side}-m {
+        padding-#{$side}: ($default-padding /2) !important;
+        @include media(tablet) { padding-#{$side}: 0 !important; }
+    }
+    //tab
+    .padding-#{$side}-t {
+        @include media(tablet) { padding-#{$side}: $default-padding !important; }
+    }
+
+    .padding-small-#{$side}-t {
+        @include media(tablet) { padding-#{$side}: ($default-padding /2) !important; }
+    }
+
+    .padding-large-#{$side}-t {
+        @include media(tablet) { padding-#{$side}: ($default-padding *2) !important; }
+    }
+    //base
+    .margin-#{$side} { margin-#{$side}: $default-padding !important; }
+    .margin-small-#{$side} { margin-#{$side}: ($default-padding /2) !important; }
+    .margin-medium-#{$side} { margin-#{$side}: ($default-padding *1) !important; }
+    .margin-large-#{$side} { margin-#{$side}: ($default-padding *2) !important; }
+    //mobile
+    .margin-#{$side}-m {
+        margin-#{$side}: $default-padding !important;
+        @include media(tablet) { margin-#{$side}: 0 !important; }
+    }
+
+    .margin-small-#{$side}-m {
+        margin-#{$side}: ($default-padding /2) !important;
+        @include media(tablet) { margin-#{$side}: 0 !important; }
+    }
+
+    .margin-medium-#{$side}-m {
+        margin-#{$side}: ($default-padding *1.5) !important;
+        @include media(tablet) { margin-#{$side}: 0 !important; }
+    }
+
+    .margin-large-#{$side}-m {
+        margin-#{$side}: ($default-padding *2) !important;
+        @include media(tablet) { margin-#{$side}: 0 !important; }
+    }
+    //tablet
+    .margin-#{$side}-t {
+        @include media(tablet) { margin-#{$side}: $default-padding !important; }
+    }
+
+    .margin-small-#{$side}-t {
+        @include media(tablet) { margin-#{$side}: ($default-padding /2) !important; }
+    }
+
+    .margin-medium-#{$side}-t {
+        @include media(tablet) { margin-#{$side}: ($default-padding*1.5) !important; }
+    }
+
+    .margin-large-#{$side}-t {
+        @include media(tablet) { margin-#{$side}: ($default-padding *2) !important; }
+    }
+
+    .border-#{$side} { border-#{$side}: solid 1px $clr-grey-dark !important; }
+
+        .border-#{$side}-m {
+            border-#{$side}: solid 1px $clr-grey-dark !important;
+            @include media(tablet) { border-#{$side}: none !important; }
+        }
+
+        .border-#{$side}-t {
+            @include media(tablet) { border-#{$side}: solid 1px $clr-grey-dark !important; }
+        }
+}
+
+.border-none { border:none!important; }
+.border-none-t {
+    @include media(tablet) { border: none!important; }
+}
+.border-none-d {
+    @include media(desktop) { border: none!important; }
+}
+/*#endregion */
+
+.equal-height {
+    @include media(mobile) { height: auto !important; }
+}
+
+.white-bg { background-color: $clr-white; }
+
+.right { float: right !important; }
+.left { float: left !important; }
+
+.print-show{ display: none; }
+
+/*#region site defaults */
+.hide { display: none !important; }
+.show { display: inline-block !important; }
+.block { display: block !important; }
+.inline-block { display: inline-block !important; }
+.inline{display:inline!important;}
+.table{display:table!important;}
+.table-cell{display:table-cell!important;}
+.middle{vertical-align:middle!important;}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+@include media(tablet) {
+    .right-t { float: right !important; }
+    .left-t { float: left !important; }
+
+    .hide-t { display: none !important; }
+    .show-t { display: inline-block !important; }
+    .block-t { display: block !important; }
+}
+
+@include media(desktop) {
+    .right-d { float: right !important; }
+    .left-d { float: left !important; }
+
+    .hide-d { display: none !important; }
+    .show-d { display: inline-block !important; }
+    .block-d { display: block !important; }
+}
+
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+.center { text-align: center !important; }
+
+@include media(tablet) {
+    .center-t { text-align: center !important; }
+    .text-left-t { text-align: left !important; }
+    .text-right-t { text-align: right !important; }
+}
+@include media(desktop) {
+    .center-d { text-align: center !important; }
+    .text-left-d { text-align: left !important; }
+    .text-right-d { text-align: right !important; }
+}
+.clear { width: 100%; clear: both; float: none; height: 0; }
+
+.bring-forward, .send-backward { position: relative; }
+.bring-forward { z-index: 10; }
+.send-backward { z-index: 1; }
+.bring-forward.send-backward { z-index: 2; }

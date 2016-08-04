@@ -1,0 +1,38 @@
+﻿@import "../defaults";
+
+h1 {
+    font-family: $font-family-main;
+    font-weight: $font-weight-light;
+    font-size: $xxl-h-font;
+    line-height:1.2;
+}
+h2 {
+    font-family:$font-family-main;
+    font-weight:$font-weight-regular;
+    font-size:$xl-h-font;
+    line-height:1.2;
+}
+h3{
+    font-family: $font-family-main;
+    font-weight: $font-weight-light;
+    font-size: $large-h-font;
+    line-height:1.2;
+}
+h4{
+    font-family: $font-family-main;
+    font-weight: $font-weight-light;
+    font-size: $medium-h-font;
+    line-height:1.2;
+}
+h5{
+    font-family: $font-family-main;
+    font-weight: $font-weight-light;
+    font-size: $small-h-font;
+    line-height:1.2;
+}
+body{
+    font-family:$font-family-main;
+    font-weight:$font-weight-regular;
+    font-size:$body-font;
+    line-height:1.2;
+}

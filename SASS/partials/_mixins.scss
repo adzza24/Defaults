@@ -1,0 +1,1648 @@
+﻿@import "mediaQueries";
+
+@mixin padding-horz ($left: 10px, $right: $left) { padding-left: $left; padding-right: $right; }
+@mixin padding-vert ($top: 10px, $bottom: $top) { padding-top: $top; padding-bottom: $bottom; }
+
+@mixin border-radius($radius) { -webkit-border-radius: $radius; -moz-border-radius: $radius; -ms-border-radius: $radius; -o-border-radius: $radius; border-radius: $radius; }
+
+@mixin gradient($from-color, $to-color) {
+    background-color: mix($from-color, $to-color); /* Fallback */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from($from-color), to($to-color));
+    background-image: -webkit-linear-gradient(top, $from-color, $to-color); 
+    background-image:    -moz-linear-gradient(top, $from-color, $to-color);
+    background-image:     -ms-linear-gradient(top, $from-color, $to-color);
+    background-image:      -o-linear-gradient(top, $from-color, $to-color);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#{$from-color}', EndColorStr='#{$to-color}')";
+}
+@mixin horizontal-gradient($start-colour, $end-colour) {
+    background-color: $start-colour;
+    background-image: -webkit-gradient(linear, left top, right top, from($start-colour), to($end-colour));
+    background-image: -webkit-linear-gradient(left, $start-colour, $end-colour);
+    background-image:    -moz-linear-gradient(left, $start-colour, $end-colour);
+    background-image:     -ms-linear-gradient(left, $start-colour, $end-colour);
+    background-image:      -o-linear-gradient(left, $start-colour, $end-colour);
+    background-image:         linear-gradient(left, $start-colour, $end-colour);
+    filter:            progid:DXImageTransform.Microsoft.gradient(start-colourStr='#{$start-colour}', end-colourStr='#{$end-colour}', gradientType='1');
+}
+
+@mixin circle($width:100px, $height: $width, $color: transparent, $padding: 0, $overflow: hidden) {
+    border-radius: 50%;
+    background-color: $color;
+    padding: $padding;
+    width: $width;
+    height: $height;
+    overflow: $overflow;
+}
+
+@mixin middle-align($children) { display: table; vertical-align: middle;
+    #{$children} { display: table-cell; vertical-align: middle; height: 100%; }
+}
+
+@mixin text-overflow($overflow-style) { -ms-text-overflow: $overflow-style; -o-text-overflow: $overflow-style; -moz-text-overflow: $overflow-style; -webkit-text-overflow: $overflow-style; text-overflow: $overflow-style; }
+
+//hero titles
+@mixin hero-font($fontSize:34px){
+    font-size:$fontSize; line-height:($fontSize*1.2); margin-bottom:15px;
+    @include media(tablet) {
+            font-size:($fontSize+10); line-height:(($fontSize+10)*1.2); margin-bottom:25px;
+        }
+}
+//h1
+@mixin xxl-font($fontSize:30px){
+    font-size:$fontSize; line-height:100%; margin-bottom:10px;
+    @include media(tablet) {
+            font-size:($fontSize+8); line-height:100%; margin-bottom:15px;
+        }
+}
+//h2
+@mixin xl-font($fontSize:26px){
+    font-size:$fontSize; line-height:100%; margin-bottom:10px;
+    @include media(tablet) {
+            font-size:($fontSize+6); margin-bottom:15px;
+        }
+}
+//h3
+@mixin large-font($fontSize:22px){
+    font-size:$fontSize; line-height:120%; margin-bottom:15px;
+    @include media(tablet) {
+            font-size:($fontSize+4); margin-bottom:20px;
+        }
+}
+//h4
+@mixin medium-font($fontSize:18px){
+    font-size:$fontSize; line-height:150%; margin-bottom:15px;
+    @include media(tablet) {
+            font-size:($fontSize+2);
+        }
+}
+//body
+@mixin body-font($fontSize:14px){
+    font-size:$fontSize; line-height:150%;
+}
+//fineprint
+@mixin small-font($fontSize:12px){
+    font-size:$fontSize; line-height:($fontSize*1.5);
+}
+@mixin specialty($property, $color){
+    @if ($property =="background"){
+        background-color:$color;
+    }
+    @else if ($property =="font"){
+        color:$color;
+    }
+    @else if ($property =="border"){
+        border-color:$color;
+    }
+}
+
+// Map of compass extensions that are loaded. The value will either be
+// the version of the extension or `true` if the version is unknown.
+$compass-extensions: compass-extensions() !default;
+
+// The list of browsers you want to support.
+// Defaults to all.
+$supported-browsers: browsers() !default;
+
+// The browser usage threshold for features that gracefully degrade
+// Defaults to 1 user in 1,000.
+$graceful-usage-threshold: 0.1 !default;
+
+// The browser usage threshold for features that cannot degrade gracefully
+// Defaults to 1 user in 10,000.
+$critical-usage-threshold: 0.01 !default;
+
+// Set this to true to generate comments that will explain why a prefix was included or omitted.
+$debug-browser-support: false !default;
+
+// Minimum browser versions that must be supported.
+// The keys of this map are any valid browser according to `browsers()`.
+// The values of this map are the min version that is valid for that browser
+// according to `browser-versions($browser)`
+$browser-minimum-versions: (
+  'chrome':  null,
+  'firefox': null,
+  'ie':      null,
+  'safari':  null,
+  'opera':   null
+) !default;
+
+
+// @private
+$default-capability-options: (
+  (full-support: true),
+  (partial-support: true)
+);
+
+// When a prefix in in context, but there is no current prefix
+// That context is recorded here so other prefixes can be avoided.
+$prefix-context: null;
+
+// When a prefix is in a selector or directive scope, this is set to the
+// current prefix value.  When `null`, either there is no prefix in scope
+// or the official prefix is being rendered. The `$prefix-context`
+// variable can be used to make that distinction.
+$current-prefix: null;
+
+// When in a context that only exists in a particular version
+// this variable is set to those versions.
+$current-browser-versions: ();
+
+// The legacy support CSS 2.1 Selectors.
+// Defaults to the $critical-usage-threshold.
+$css-sel2-support-threshold: $critical-usage-threshold !default;
+
+// Check if the browser is in scope given the browser support and current prefix minimums.
+@function browser-out-of-scope($browser, $version: null) {
+  @if not index($supported-browsers, $browser) {
+    @if $debug-browser-support {
+      @return "#{$browser} is not listed as a supported browser."
+    } @else {
+      @return true;
+    }
+  } @else if not ($current-prefix == null or $current-prefix == browser-prefix($browser)) {
+    @if $debug-browser-support {
+      @return "#{$browser} #{$version} is incompatible with #{$current-prefix}."
+    } @else {
+      @return true;
+    }
+  }
+  $current-range: map-get($current-browser-versions, $browser);
+  $current-min: if($current-range, nth($current-range, 1), null);
+  $current-max: if($current-range, nth($current-range, 2), null);
+  @if not ($version and $current-max) {
+    // We don't have any versions to compare
+    @return false;
+  } @else {
+    // If the version is less than the current min, it is not supported
+    $too-old: compare-browser-versions($browser, $version, $current-min) < 0;
+    $too-new: compare-browser-versions($browser, $version, $current-max) > 0;
+    @if $too-old or $too-new {
+      @if $debug-browser-support {
+        @return "The current scope only works with #{display-browser-range($browser, $current-min, $current-max)}.";
+      } @else {
+        @return true;
+      }
+    } @else {
+      @return false;
+    }
+  }
+}
+
+// Check whether the browser is supported according to the supported browsers,
+// declared minimum support and usage thresholds.
+@function support-legacy-browser($browser, $min-version, $max-version: null, $threshold: $critical-usage-threshold) {
+  @if not index($supported-browsers, $browser) {
+    @return false;
+  }
+  // Check agaist usage stats and declared minimums
+  $min-required-version: map-get($browser-minimum-versions, $browser);
+  $usage: if($max-version,
+             omitted-usage($browser, $min-version, $max-version),
+             omitted-usage($browser, $min-version));
+  @return $usage > $threshold or
+          ($min-required-version and
+           compare-browser-versions($browser, $max-version or $min-version, $min-required-version) >= 0);
+}
+
+// Include content for a legacy browser
+// Version can be a single version string or a list of versions ordered from oldest to newest.
+@mixin for-legacy-browser($browser, $min-version, $max-version: $min-version,
+                          $threshold: $critical-usage-threshold,
+                          $ranges: ($browser: $min-version $max-version)) {
+  @if not browser-out-of-scope($browser, $max-version) and
+      support-legacy-browser($browser, $min-version, $max-version, $threshold)
+  {
+    @if $debug-browser-support {
+      /* Content for #{display-browser-range($browser, $min-version, $max-version)}.
+      Min version: #{map-get($browser-minimum-versions, $browser) or unspecified}.
+      User threshold to keep: #{$threshold}%. If #{display-browser-range($browser, $min-version, $max-version)} are omitted: #{omitted-usage($browser, $min-version, $max-version)}%. */
+    }
+    @include with-browser-ranges(intersect-browser-ranges($current-browser-versions, $ranges)) {
+      @content;
+    }
+  } @else if $debug-browser-support and browser-out-of-scope($browser, $max-version) {
+    /* Content for #{display-browser-range($browser, $min-version, $max-version)} omitted.
+       Not allowed in the current scope: #{browser-out-of-scope($browser, $max-version)} */
+  } @else if $debug-browser-support and not
+             support-legacy-browser($browser, $min-version, $max-version, $threshold) {
+    @if omitted-usage($browser, $min-version, $max-version) > $threshold {
+      /* Content for #{display-browser-range($browser, $min-version, $max-version)} omitted.
+         User threshold to keep: #{$threshold}%. If #{display-browser-range($browser, $min-version, $max-version)} and below are omitted: #{omitted-usage($browser, $min-version, $max-version)}%. */
+    } @else {
+      /* Content for #{display-browser-range($browser, $min-version, $max-version)} omitted.
+         Minimum support is #{map-get($browser-minimum-versions, $browser)}. */
+    }
+  }
+}
+
+@function display-browser-range($browser, $min-version, $max-version: $min-version) {
+  @return "#{unquote($browser)} #{unquote($min-version)}#{if($max-version != $min-version, unquote(' -') unquote($max-version), null)}";
+}
+
+
+// Renders the content once if any of the legacy browsers are supported.
+// $browsers is a map of browser name to version ranges
+@mixin for-legacy-browsers($browsers, $threshold: $critical-usage-threshold) {
+  $rendered: false;
+  @each $browser, $range in $browsers {
+    @if not $rendered {
+      @include for-legacy-browser($browser, $range..., $threshold: $threshold, $ranges: $browsers) {
+        $rendered: true;
+        @content;
+      }
+    }
+  }
+}
+
+// If there's a prefix context in scope, this will only output the content if the prefix matches.
+// Otherwise, sets the current prefix scope and outputs the content.
+@mixin with-prefix($prefix) {
+  @if $current-prefix or $prefix-context {
+    @if $current-prefix == $prefix or $prefix-context == $prefix {
+      @if $debug-browser-support {
+        @if $prefix {
+          /* content for #{$prefix} because #{$current-prefix or $prefix-context} is already in scope. */
+        } @else {
+          /* unprefixed content. #{$current-prefix or $prefix-context} is already in scope. */
+        }
+      }
+      $old-prefix-context: $prefix-context;
+      $old-prefix: $current-prefix;
+      $prefix-context: $prefix-context or $current-prefix !global;
+      $current-prefix: $prefix !global;
+      @content;
+      $prefix-context: $old-prefix-context !global;
+      $current-prefix: $old-prefix !global;
+    } @else if $prefix == null {
+      $old-prefix-context: $prefix-context;
+      $prefix-context: $prefix-context or $current-prefix !global;
+      $current-prefix: null !global;
+      @if $debug-browser-support {
+        /* Content for official syntax. Prefix context is still #{$prefix-context}. */
+      }
+      @content;
+      $current-prefix: $prefix-context !global;
+      $prefix-context: $old-prefix-context !global;
+    } @else if $debug-browser-support {
+      /* Omitting content for #{$prefix} because #{$current-prefix} is already in scope. */
+    }
+  } @else {
+    @if $debug-browser-support and $prefix {
+      /* Creating new #{$prefix} context. */
+    }
+    $prefix-context: $prefix !global;
+    $current-prefix: $prefix !global;
+    @content;
+    $current-prefix: null !global;
+    $prefix-context: null !global;
+  }
+}
+
+@function prefixes-for-capability($capability, $threshold, $capability-options: $default-capability-options) {
+  $result: ();
+  @each $prefix in browser-prefixes($supported-browsers) {
+    $result: map-merge($result,
+                      ($prefix: use-prefix($prefix, $capability, $threshold, $capability-options)));
+  }
+  @return $result;
+}
+
+// Yields to the mixin content once for each prefix required.
+// The current prefix is set to the $current-prefix global for use by the included content.
+// Also yields to the content once with $current-prefix set to null for the official version
+// as long as there's not already a prefix in scope.
+@mixin with-each-prefix($capability, $threshold, $capability-options: $default-capability-options) {
+  @each $prefix, $should-use-prefix in prefixes-for-capability($capability, $threshold, $capability-options) {
+    @if $should-use-prefix {
+      @if $debug-browser-support and type-of($should-use-prefix) == list {
+        /* Capability #{$capability} is prefixed with #{$prefix} because #{$should-use-prefix} is required. */
+      } @else if $debug-browser-support and type-of($should-use-prefix) == number {
+        /* Capability #{$capability} is prefixed with #{$prefix} because #{$should-use-prefix}% of users need it which is more than the threshold of #{$threshold}%. */
+      }
+      @include with-prefix($prefix) {
+        @include with-browser-ranges($capability) {
+          @content;
+        }
+      }
+    } @else if $debug-browser-support {
+      /* Capability #{$capability} is not prefixed with #{$prefix} because #{prefix-usage($prefix, $capability, $capability-options)}% of users are affected which is less than the threshold of #{$threshold}. */
+    }
+  }
+  @include with-prefix(null) {
+    @include with-browser-ranges($capability) {
+      @content;
+    }
+  }
+}
+
+// Returns true if at least one browser-version pair in $subset-ranges
+// is a higher (or same) version than the browser-version pairs in
+// $ranges.
+@function has-browser-subset($ranges, $subset-ranges) {
+  $found-mismatch: false;
+  @each $browser, $subset-range in $subset-ranges {
+    $range: map-get($ranges, $browser);
+    @if $range {
+      $min-1: nth($subset-range, 1);
+      $max-1: nth($subset-range, 2);
+      $min-2: nth($range, 1);
+      $max-2: nth($range, 2);
+      @if (compare-browser-versions($browser, $min-2, $min-1) <= 0 and
+           compare-browser-versions($browser, $min-1, $max-2) <= 0) or
+          (compare-browser-versions($browser, $min-2, $max-1) <= 0 and
+           compare-browser-versions($browser, $max-1, $max-2) <= 0) or
+          (compare-browser-versions($browser, $min-1, $min-2) <= 0 and
+           compare-browser-versions($browser, $max-1, $max-2) >= 0) or
+          (compare-browser-versions($browser, $min-1, $min-2) >= 0 and
+           compare-browser-versions($browser, $max-1, $max-2) <= 0) {
+        @return true;
+      } @else {
+        $found-mismatch: true
+      }
+    }
+  }
+  @return not $found-mismatch;
+}
+
+// When the same browser is in both maps, then the minimum will be set
+// to the maximum of the two minimum versions, and the maximum will be
+// set to the minmum of the two maximum versions.
+@function intersect-browser-ranges($ranges, $new-ranges) {
+  @each $browser, $new-range in $new-ranges {
+    $old-range: map-get($ranges, $browser);
+    @if $old-range {
+      $old-min: nth($old-range, 1);
+      $old-max: if(length($old-range) == 1, $old-min, nth($old-range, 2));
+      $new-min: nth($new-range, 1);
+      $new-max: if(length($new-range) == 1, $new-min, nth($new-range, 2));
+      $maximin: if(compare-browser-versions($browser, $old-min, $new-min) > 0,
+                   $old-min, $new-min);
+      $minimax: if(compare-browser-versions($browser, $old-max, $new-max) < 0,
+                   $old-max, $new-max);
+      $ranges: map-merge($ranges, ($browser: $maximin $minimax));
+    } @else {
+      $ranges: map-merge($ranges, ($browser: $new-range));
+    }
+  }
+  @return $ranges;
+}
+
+// If passed a map, that will be the new browser ranges.
+// Otherwise a range map will be created based on the given capability and prefix
+// using the `browser-ranges($capability, $prefix)` function.
+//
+// If there are current ranges in scope and the new ranges have some overlap
+// with the current, 
+//
+// If there is no overlap, then the content will not be rendered.
+@mixin with-browser-ranges($capability, $prefix: $current-prefix) {
+  $new-ranges: null;
+  @if type-of($capability) == map {
+    $new-ranges: $capability;
+  } @else {
+    $new-ranges: browser-ranges($capability, $prefix);
+  }
+
+  @if has-browser-subset($current-browser-versions, $new-ranges) {
+    $old-ranges: $current-browser-versions;
+    $current-browser-versions: intersect-browser-ranges($old-ranges, $new-ranges) !global;
+    @content;
+    $current-browser-versions: $old-ranges !global;
+  } @else if $debug-browser-support {
+    /* Excluding content because #{inspect($new-ranges)} is not included within
+       #{inspect($current-browser-versions)} */
+  }
+}
+
+// Returns true if the prefixed usage stats for the capability exceed the threshold
+// or if the minimum version for a supported browser would require a prefix for the capability.
+@function use-prefix($prefix, $capability, $threshold, $capability-options: $default-capability-options) {
+  $usage: prefix-usage($prefix, $capability, $capability-options);
+  @if $usage > $threshold {
+    @return $usage;
+  } @else {
+    @each $browser in browsers($prefix) {
+      @if index($supported-browsers, $browser) {
+        $min-version: map-get($browser-minimum-versions, $browser);
+        @if $min-version {
+          $actual-prefix: browser-requires-prefix($browser, $min-version, $capability, $capability-options);
+          @if $actual-prefix and $prefix == $actual-prefix {
+            @return $browser $min-version;
+          }
+        }
+      }
+    }
+  }
+  @return false;
+}
+
+@function prefix-identifier($ident, $prefix: $current-prefix) {
+  @return unquote("#{$prefix}#{if($prefix, '-', null)}#{$ident}");
+}
+
+// Output a property and value using the current prefix.
+// It will be unprefixed if $current-prefix is null.
+@mixin prefix-prop($property, $value, $prefix: $current-prefix) {
+  #{prefix-identifier($property, $prefix)}: $value;
+}
+
+// Emit a set of properties with the prefix governed by the capability and usage threshold given.
+//
+// Example:
+//
+//     @include prefixed-properties(css-animation, $animation-support-threshold,
+//       (animation-name: foo, animation-duration: 2s)
+//     );
+@mixin prefixed-properties($capability, $threshold, $properties, $capability-options: $default-capability-options) {
+  @include with-each-prefix($capability, $threshold, $capability-options) {
+    @each $prop, $value in $properties {
+      @include prefix-prop($prop, $value);
+    }
+  }
+}
+
+
+// @private
+@function warn-about-old-variables() {
+  $old-variables-in-use: ();
+  @each $old-variable-name in
+        (legacy-support-for-ie, legacy-support-for-ie6, legacy-support-for-ie7,
+         legacy-support-for-ie8, legacy-support-for-mozilla, legacy-support-for-webkit,
+         experimental-support-for-mozilla, experimental-support-for-webkit,
+         experimental-support-for-opera, experimental-support-for-microsoft,
+         experimental-support-for-khtml, experimental-support-for-svg)
+  {
+    @if global-variable-exists($old-variable-name) {
+      $old-variables-in-use: append($old-variables-in-use,
+                                    unquote("$#{$old-variable-name}"), comma);
+    }
+  }
+  @if length($old-variables-in-use) > 0 {
+    @warn "Compass has changed how browser support is configured. " +
+          "The following configuration variables " +
+          "are no longer supported: #{$old-variables-in-use}." +
+          "Details: http://compass-style.org/help/documentation/tuning-vendor-prefixes/"
+  }
+  @return $old-variables-in-use;
+}
+
+// @private
+@function warn-about-pie-removal() {
+  @if global-variable-exists(experimental-support-for-pie) {
+    @warn "Compass no longer supports css3pie.";
+  }
+  @return true;
+}
+
+// Enable browser support debugging within the content block.
+// Or you can enable it for the whole stylesheet by setting `$debug-browser-support` to true.
+@mixin with-browser-support-debugging {
+  $current-status: $debug-browser-support;
+  $debug-browser-support: true !global;
+  @content;
+  $debug-browser-support: $current-status !global;
+}
+
+// Set a default value if the given arglist is empty
+@function set-arglist-default($arglist, $default) {
+  $default-index: index($arglist, default);
+  @if $default-index {
+    $arglist: set-nth($arglist, $default-index, $default)
+  }
+  @return if(length($arglist) > 0, $arglist, $default);
+}
+
+
+// @private
+$old-variable-warnings-issued: warn-about-old-variables() !default;
+
+// @private
+$pie-removal-warning-issued: warn-about-pie-removal() !default;
+
+// @private
+@function warn-about-useless-prefix-arguments($moz: null, $webkit: null, $o: null, $khtml: null, $official: null) {
+  @if $moz != null or $webkit != null or $o != null or $khtml != null or $official != null {
+    @warn "Browser prefix arguments to this mixin are no longer used and " +
+          "will be removed in the next release.";
+  }
+  @return true;
+}
+
+// coerce a list to be comma delimited or make a new, empty comma delimited list.
+@function comma-list($list: ()) {
+  @return join((), $list, comma);
+}
+
+// @private Returns the legacy value for a given box-model
+// - Used by background-clip and -origin.
+@function legacy-box($box) {
+  $box: unquote($box);
+  @if $box == padding-box { $box: padding; }
+  @if $box == border-box { $box: border; }
+  @if $box == content-box { $box: content; }
+  @return $box;
+}
+
+
+// The the user threshold for transition support. Defaults to `$graceful-usage-threshold`
+$transition-support-threshold: $graceful-usage-threshold !default;
+
+
+// CSS Transitions
+// Currently only works in Webkit.
+//
+// * expected in CSS3, FireFox 3.6/7 and Opera Presto 2.3
+// * We'll be prepared.
+//
+// Including this submodule sets following defaults for the mixins:
+//
+//     $default-transition-property : all
+//     $default-transition-duration : 1s
+//     $default-transition-function : false
+//     $default-transition-delay    : false
+//
+// Override them if you like. Timing-function and delay are set to false for browser defaults (ease, 0s).
+
+$default-transition-property: all !default;
+
+$default-transition-duration: 1s !default;
+
+$default-transition-function: null !default;
+
+$default-transition-delay: null !default;
+
+$transitionable-prefixed-values: transform, transform-origin !default;
+
+
+
+// Checks if the value given is a unit of time.
+@function is-time($value) {
+  @return if(type-of($value) == number, not not index(s ms, unit($value)), false);
+}
+
+// Returns `$property` with the given prefix if it is found in `$transitionable-prefixed-values`.
+@function prefixed-for-transition($prefix, $property) {
+  @if not $prefix {
+    @return $property;
+  }
+  @if type-of($property) == list or type-of($property) == arglist {
+    $new-list: comma-list();
+    @each $v in $property {
+      $new-list: append($new-list, prefixed-for-transition($prefix, $v));
+    }
+    @return $new-list;
+  } @else {
+    @if index($transitionable-prefixed-values, $property) {
+      @return #{$prefix}-#{$property};
+    } @else {
+      @return $property;
+    }
+  }
+}
+
+// Returns $transition-map which includes key and values that map to a transition declaration
+@function transition-map($transition) {
+  $transition-map: ();
+
+  @each $item in $transition {
+    @if is-time($item) {
+      @if map-has-key($transition-map, duration) {
+        $transition-map: map-merge($transition-map, (delay: $item));
+      } @else {
+        $transition-map: map-merge($transition-map, (duration: $item));
+      }
+    } @else if map-has-key($transition-map, property) {
+      $transition-map: map-merge($transition-map, (timing-function: $item));
+    } @else {
+      $transition-map: map-merge($transition-map, (property: $item));
+    }
+  }
+
+  @return $transition-map;
+}
+
+// One or more properties to transition
+//
+// * for multiple, use a comma-delimited list
+// * also accepts "all" or "none"
+
+@mixin transition-property($properties...) {
+  $properties: set-arglist-default($properties, $default-transition-property);
+  @include with-each-prefix(css-transitions, $transition-support-threshold) {
+    $props: if($current-prefix, prefixed-for-transition($current-prefix, $properties), $properties);
+    @include prefix-prop(transition-property, $props);
+  }
+}
+
+// One or more durations in seconds
+//
+// * for multiple, use a comma-delimited list
+// * these durations will affect the properties in the same list position
+
+@mixin transition-duration($durations...) {
+  $durations: set-arglist-default($durations, $default-transition-duration);
+  @include prefixed-properties(css-transitions, $transition-support-threshold, (
+    transition-duration: $durations
+  ));
+}
+
+// One or more timing functions
+//
+// * [ ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier(x1, y1, x2, y2)]
+// * For multiple, use a comma-delimited list
+// * These functions will effect the properties in the same list position
+
+@mixin transition-timing-function($functions...) {
+  $functions: set-arglist-default($functions, $default-transition-function);
+  @include prefixed-properties(css-transitions, $transition-support-threshold, (
+    transition-timing-function: $functions
+  ));
+}
+
+// One or more transition-delays in seconds
+//
+// * for multiple, use a comma-delimited list
+// * these delays will effect the properties in the same list position
+
+@mixin transition-delay($delays...) {
+  $delays: set-arglist-default($delays, $default-transition-delay);
+  @include prefixed-properties(css-transitions, $transition-support-threshold, (
+    transition-delay: $delays
+  ));
+}
+
+// Transition all-in-one shorthand
+
+@mixin single-transition(
+  $property: $default-transition-property,
+  $duration: $default-transition-duration,
+  $function: $default-transition-function,
+  $delay: $default-transition-delay
+) {
+  @include transition(compact($property $duration $function $delay));
+}
+
+@mixin transition($transitions...) {
+  $default: (compact($default-transition-property $default-transition-duration $default-transition-function $default-transition-delay),);
+  $transitions: if(length($transitions) == 1 and type-of(nth($transitions, 1)) == list and list-separator(nth($transitions, 1)) == comma, nth($transitions, 1), $transitions);
+  $transitions: set-arglist-default($transitions, $default);
+
+
+  @include with-each-prefix(css-transitions, $transition-support-threshold) {
+    $delays: comma-list();
+    $transitions-without-delays: comma-list();
+    $transitions-with-delays: comma-list();
+    $has-delays: false;
+
+
+    // This block can be made considerably simpler at the point in time that
+    // we no longer need to deal with the differences in how delays are treated.
+    @each $transition in $transitions {
+      // Declare initial values for transition
+      $transition: transition-map($transition);
+
+      $property: map-get($transition, property);
+      $duration: map-get($transition, duration);
+      $timing-function: map-get($transition, timing-function);
+      $delay: map-get($transition, delay);
+
+      // Parse transition string to assign values into correct variables
+      $has-delays: $has-delays or $delay;
+
+      @if $current-prefix == -webkit {
+        // Keep a list of delays in case one is specified
+        $delays: append($delays, if($delay, $delay, 0s));
+        $transitions-without-delays: append($transitions-without-delays,
+          prefixed-for-transition($current-prefix, $property) $duration $timing-function);
+      } @else {
+        $transitions-with-delays: append($transitions-with-delays,
+          prefixed-for-transition($current-prefix, $property) $duration $timing-function $delay);
+      }
+    }
+
+    @if $current-prefix == -webkit {
+      @include prefix-prop(transition, $transitions-without-delays);
+      @if $has-delays {
+        @include prefix-prop(transition-delay, $delays);
+      }
+    } @else if $current-prefix {
+      @include prefix-prop(transition, $transitions-with-delays);
+    } @else {
+      transition: $transitions-with-delays;
+    }
+  }
+}
+
+@import "compass/support";
+
+// The the user threshold for transform support. Defaults to `$graceful-usage-threshold`
+$transform-support-threshold: $graceful-usage-threshold !default;
+
+// @doc off
+// Note ----------------------------------------------------------------------
+// Safari, Chrome, and Firefox all support 3D transforms. However,
+// only in the most recent builds. You should also provide fallback 2d support for
+// Opera and IE. IE10 is slated to have 3d enabled, but is currently unreleased.
+// To make that easy, all 2D transforms include an browser-targeting toggle ($only3d)
+// to switch between the two support lists. The toggle defaults to 'false' (2D),
+// and also accepts 'true' (3D). Currently the lists are as follows:
+// 2D: Mozilla, Webkit, Opera, Official
+// 3D: Webkit, Firefox.
+
+// Available Transforms ------------------------------------------------------
+// - Scale (2d and 3d)
+// - Rotate (2d and 3d)
+// - Translate (2d and 3d)
+// - Skew (2d only)
+
+// Transform Parameters ------------------------------------------------------
+// - Transform Origin (2d and 3d)
+// - Perspective (3d)
+// - Perspective Origin (3d)
+// - Transform Style (3d)
+// - Backface Visibility (3d)
+
+// Mixins --------------------------------------------------------------------
+// transform-origin
+//  - shortcuts:  transform-origin2d, transform-origin3d
+//  - helpers:    apply-origin
+// transform
+//  - shortcuts:  transform2d, transform3d
+//  - helpers:    simple-transform, create-transform
+// perspective
+//  - helpers:    perspective-origin
+// transform-style
+// backface-visibility
+// scale
+//  - shortcuts:  scaleX, scaleY, scaleZ, scale3d
+// rotate
+//  - shortcuts:  rotateX, rotateY, rotate3d
+// translate
+//  - shortcuts:  translateX, translateY, translateZ, translate3d
+// skew
+//  - shortcuts:  skewX, skewY
+
+// Defaults ------------------------------------------------------------------
+// @doc on
+
+// The default x-origin for transforms
+$default-origin-x    : 50%                   !default;
+// The default y-origin for transforms
+$default-origin-y    : 50%                   !default;
+// The default z-origin for transforms
+$default-origin-z    : 50%                   !default;
+
+
+// The default x-multiplier for scaling
+$default-scale-x     : 1.25                  !default;
+// The default y-multiplier for scaling
+$default-scale-y     : $default-scale-x      !default;
+// The default z-multiplier for scaling
+$default-scale-z     : $default-scale-x      !default;
+
+
+// The default angle for rotations
+$default-rotate      : 45deg                 !default;
+
+
+// The default x-vector for the axis of 3d rotations
+$default-vector-x    : 1                     !default;
+// The default y-vector for the axis of 3d rotations
+$default-vector-y    : 1                     !default;
+// The default z-vector for the axis of 3d rotations
+$default-vector-z    : 1                     !default;
+
+
+// The default x-length for translations
+$default-translate-x : 1em                   !default;
+// The default y-length for translations
+$default-translate-y : $default-translate-x  !default;
+// The default z-length for translations
+$default-translate-z : $default-translate-x  !default;
+
+
+// The default x-angle for skewing
+$default-skew-x      : 5deg                  !default;
+// The default y-angle for skewing
+$default-skew-y      : 5deg                  !default;
+
+
+// **Transform-origin**
+// Transform-origin sent as a complete string
+//
+//     @include apply-origin( origin [, 3D-only ] )
+//
+// where 'origin' is a space separated list containing 1-3 (x/y/z) coordinates
+// in percentages, absolute (px, cm, in, em etc..) or relative
+// (left, top, right, bottom, center) units
+//
+// @param only3d Set this to true to only apply this
+// mixin where browsers have 3D support.
+@mixin apply-origin($origin, $only3d) {
+  $capability: if($only3d or length($origin) > 2, transforms3d, transforms2d);
+  @include prefixed-properties($capability, $transform-support-threshold, (
+    transform-origin: $origin
+  ));
+}
+
+// Transform-origin sent as individual arguments:
+//
+//     @include transform-origin( [ origin-x, origin-y, origin-z, 3D-only ] )
+//
+// where the 3 'origin-' arguments represent x/y/z coordinates.
+//
+// **NOTE:** setting z coordinates triggers 3D support list, leave false for 2D support
+@mixin transform-origin(
+  $origin-x: $default-origin-x,
+  $origin-y: $default-origin-y,
+  $origin-z: false,
+  $only3d:   if($origin-z, true, false)
+) {
+  $origin: unquote('');
+  @if $origin-x or $origin-y or $origin-z {
+    @if $origin-x { $origin: $origin-x; } @else { $origin: 50%; }
+    @if $origin-y { $origin: $origin $origin-y; } @else { @if $origin-z { $origin: $origin 50%; }}
+    @if $origin-z { $origin: $origin $origin-z; }
+    @include apply-origin($origin, $only3d);
+  }
+}
+
+
+// Transform sent as a complete string:
+//
+//     @include transform( transforms [, 3D-only ] )
+//
+// where 'transforms' is a space separated list of all the transforms to be applied.
+@mixin transform(
+  $transform,
+  $only3d: false
+) {
+  $capability: if($only3d, transforms3d, transforms2d);
+  @include prefixed-properties($capability, $transform-support-threshold, (
+    transform: $transform
+  ));
+}
+
+// Shortcut to target all browsers with 2D transform support
+@mixin transform2d($trans) {
+  @include transform($trans, false);
+}
+
+// Shortcut to target only browsers with 3D transform support
+@mixin transform3d($trans) {
+  @include transform($trans, true);
+}
+
+// @doc off
+// 3D Parameters -------------------------------------------------------------
+// @doc on
+
+// Set the perspective of 3D transforms on the children of an element:
+//
+//      @include perspective( perspective )
+//
+// where 'perspective' is a unitless number representing the depth of the
+// z-axis. The higher the perspective, the more exaggerated the foreshortening.
+// values from 500 to 1000 are more-or-less "normal" - a good starting-point.
+@mixin perspective($p) {
+  @include prefixed-properties(transforms3d, $transform-support-threshold, (
+    perspective: $p
+  ));
+}
+
+// Set the origin position for the perspective
+//
+//      @include perspective-origin(origin-x [origin-y])
+//
+// where the two arguments represent x/y coordinates
+@mixin perspective-origin($origin: 50%) {
+  @include prefixed-properties(transforms3d, $transform-support-threshold, (
+    perspective-origin: $origin
+  ));
+}
+
+// Determine whether a 3D objects children also live in the given 3D space
+//
+//      @include transform-style( [ style ] )
+//
+// where `style` can be either `flat` or `preserve-3d`.
+// Browsers default to `flat`, mixin defaults to `preserve-3d`.
+@mixin transform-style($style: preserve-3d) {
+  @include prefixed-properties(transforms3d, $transform-support-threshold, (
+    transform-style: $style
+  ));
+}
+
+// Determine the visibility of an element when it's back is turned
+//
+//     @include backface-visibility( [ visibility ] )
+//
+// where `visibility` can be either `visible` or `hidden`.
+// Browsers default to visible, mixin defaults to hidden
+@mixin backface-visibility($visibility: hidden) {
+  @include prefixed-properties(transforms3d, $transform-support-threshold, (
+    backface-visibility: $visibility
+  ));
+}
+
+// @doc off
+// Transform Partials --------------------------------------------------------
+// These work well on their own, but they don't add to each other, they override.
+// Use along with transform parameter mixins to adjust origin, perspective and style
+// ---------------------------------------------------------------------------
+
+
+// Scale ---------------------------------------------------------------------
+// @doc on
+
+// Scale an object along the x and y axis:
+//
+//      @include scale( [ scale-x, scale-y, perspective, 3D-only ] )
+//
+// where the 'scale-' arguments are unitless multipliers of the x and y dimensions
+// and perspective, which works the same as the stand-alone perspective property/mixin
+// but applies to the individual element (multiplied with any parent perspective)
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin scale(
+  $scale-x:     $default-scale-x,
+  $scale-y:     $scale-x,
+  $perspective: false,
+  $only3d:      false
+) {
+  $trans: scale($scale-x, $scale-y);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform($trans, $only3d);
+}
+
+// Scale an object along the x axis
+// @include scaleX( [ scale-x, perspective, 3D-only ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin scaleX(
+  $scale:       $default-scale-x,
+  $perspective: false,
+  $only3d:      false
+) {
+  $trans: scaleX($scale);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform($trans, $only3d);
+}
+
+// Scale an object along the y axis
+// @include scaleY( [ scale-y, perspective, 3D-only ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin scaleY(
+  $scale:       $default-scale-y,
+  $perspective: false,
+  $only3d:      false
+) {
+  $trans: scaleY($scale);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform($trans, $only3d);
+}
+
+// Scale an object along the z axis
+// @include scaleZ( [ scale-z, perspective ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin scaleZ(
+  $scale: $default-scale-z,
+  $perspective: false
+) {
+  $trans: scaleZ($scale);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform3d($trans);
+}
+
+// Scale and object along all three axis
+// @include scale3d( [ scale-x, scale-y, scale-z, perspective ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin scale3d(
+  $scale-x:     $default-scale-x,
+  $scale-y:     $default-scale-y,
+  $scale-z:     $default-scale-z,
+  $perspective: false
+) {
+  $trans: scale3d($scale-x, $scale-y, $scale-z);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform3d($trans);
+}
+
+// @doc off
+// Rotate --------------------------------------------------------------------
+// @doc on
+
+// Rotate an object around the z axis  (2D)
+// @include rotate( [ rotation, perspective, 3D-only ] )
+// where 'rotation' is an angle set in degrees (deg) or radian (rad) units
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin rotate(
+  $rotate:      $default-rotate,
+  $perspective: false,
+  $only3d:      false
+) {
+  $trans: rotate($rotate);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform($trans, $only3d);
+}
+
+// A longcut for 'rotate' in case you forget that 'z' is implied
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin rotateZ(
+  $rotate:      $default-rotate,
+  $perspective: false,
+  $only3d:      false
+) {
+  @include rotate($rotate, $perspective, $only3d);
+}
+
+// Rotate an object around the x axis (3D)
+// @include rotateX( [ rotation, perspective ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin rotateX(
+  $rotate: $default-rotate,
+  $perspective: false
+) {
+  $trans: rotateX($rotate);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform3d($trans);
+}
+
+// Rotate an object around the y axis (3D)
+// @include rotate( [ rotation, perspective ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin rotateY(
+  $rotate: $default-rotate,
+  $perspective: false
+) {
+  $trans: rotateY($rotate);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform3d($trans);
+}
+
+// Rotate an object around an arbitrary axis (3D)
+// @include rotate( [ vector-x, vector-y, vector-z, rotation, perspective ] )
+// where the 'vector-' arguments accept unitless numbers.
+// These numbers are not important on their own, but in relation to one another
+// creating an axis from your transform-origin, along the axis of Xx = Yy = Zz.
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin rotate3d(
+  $vector-x: $default-vector-x,
+  $vector-y: $default-vector-y,
+  $vector-z: $default-vector-z,
+  $rotate: $default-rotate,
+  $perspective: false
+) {
+  $trans: rotate3d($vector-x, $vector-y, $vector-z, $rotate);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform3d($trans);
+}
+
+// @doc off
+// Translate -----------------------------------------------------------------
+// @doc on
+
+// Move an object along the x or y axis (2D)
+// @include translate( [ translate-x, translate-y, perspective, 3D-only ] )
+// where the 'translate-' arguments accept any distance in percentages or absolute (px, cm, in, em etc..) units.
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin translate(
+  $translate-x: $default-translate-x,
+  $translate-y: $default-translate-y,
+  $perspective: false,
+  $only3d:      false
+) {
+  $trans: translate($translate-x, $translate-y);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform($trans, $only3d);
+}
+
+// Move an object along the x axis (2D)
+// @include translate( [ translate-x, perspective, 3D-only ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin translateX(
+  $trans-x:     $default-translate-x,
+  $perspective: false,
+  $only3d:      false
+) {
+  $trans: translateX($trans-x);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform($trans, $only3d);
+}
+
+// Move an object along the y axis (2D)
+// @include translate( [ translate-y, perspective, 3D-only ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin translateY(
+  $trans-y:     $default-translate-y,
+  $perspective: false,
+  $only3d:      false
+) {
+  $trans: translateY($trans-y);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform($trans, $only3d);
+}
+
+// Move an object along the z axis (3D)
+// @include translate( [ translate-z, perspective ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin translateZ(
+  $trans-z:     $default-translate-z,
+  $perspective: false
+) {
+  $trans: translateZ($trans-z);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform3d($trans);
+}
+
+// Move an object along the x, y and z axis (3D)
+// @include translate( [ translate-x, translate-y, translate-z, perspective ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin translate3d(
+  $translate-x: $default-translate-x,
+  $translate-y: $default-translate-y,
+  $translate-z: $default-translate-z,
+  $perspective: false
+) {
+  $trans: translate3d($translate-x, $translate-y, $translate-z);
+  @if $perspective { $trans: perspective($perspective) $trans; }
+  @include transform3d($trans);
+}
+
+// @doc off
+// Skew ----------------------------------------------------------------------
+// @doc on
+
+// Skew an element:
+//
+//     @include skew( [ skew-x, skew-y, 3D-only ] )
+//
+// where the 'skew-' arguments accept css angles in degrees (deg) or radian (rad) units.
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin skew(
+  $skew-x: $default-skew-x,
+  $skew-y: $default-skew-y,
+  $only3d: false
+) {
+  $trans: skew($skew-x, $skew-y);
+  @include transform($trans, $only3d);
+}
+
+// Skew an element along the x axiz
+//
+//     @include skew( [ skew-x, 3D-only ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin skewX(
+  $skew-x: $default-skew-x,
+  $only3d: false
+) {
+  $trans: skewX($skew-x);
+  @include transform($trans, $only3d);
+}
+
+// Skew an element along the y axis
+//
+//     @include skew( [ skew-y, 3D-only ] )
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin skewY(
+  $skew-y: $default-skew-y,
+  $only3d: false
+) {
+  $trans: skewY($skew-y);
+  @include transform($trans, $only3d);
+}
+
+
+// Full transform mixins
+// For settings any combination of transforms as arguments
+// These are complex and not highly recommended for daily use. They are mainly
+// here for backward-compatibility purposes.
+//
+// * they include origin adjustments
+// * scale takes a multiplier (unitless), rotate and skew take degrees (deg)
+//
+// **Note** This mixin cannot be combined with other transform mixins.
+@mixin create-transform(
+  $perspective: false,
+  $scale-x:     false,
+  $scale-y:     false,
+  $scale-z:     false,
+  $rotate-x:    false,
+  $rotate-y:    false,
+  $rotate-z:    false,
+  $rotate3d:    false,
+  $trans-x:     false,
+  $trans-y:     false,
+  $trans-z:     false,
+  $skew-x:      false,
+  $skew-y:      false,
+  $origin-x:    false,
+  $origin-y:    false,
+  $origin-z:    false,
+  $only3d:      false
+) {
+  $trans: unquote("");
+
+  // perspective
+  @if $perspective { $trans: perspective($perspective) ; }
+
+  // scale
+  @if $scale-x and $scale-y {
+    @if $scale-z { $trans: $trans scale3d($scale-x, $scale-y, $scale-z); }
+    @else { $trans: $trans scale($scale-x, $scale-y); }
+  } @else {
+    @if $scale-x { $trans: $trans scaleX($scale-x); }
+    @if $scale-y { $trans: $trans scaleY($scale-y); }
+    @if $scale-z { $trans: $trans scaleZ($scale-z); }
+  }
+
+  // rotate
+  @if $rotate-x { $trans: $trans rotateX($rotate-x); }
+  @if $rotate-y { $trans: $trans rotateY($rotate-y); }
+  @if $rotate-z { $trans: $trans rotateZ($rotate-z); }
+  @if $rotate3d { $trans: $trans rotate3d($rotate3d); }
+
+  // translate
+  @if $trans-x and $trans-y {
+    @if $trans-z { $trans: $trans translate3d($trans-x, $trans-y, $trans-z); }
+    @else { $trans: $trans translate($trans-x, $trans-y); }
+  } @else {
+    @if $trans-x { $trans: $trans translateX($trans-x); }
+    @if $trans-y { $trans: $trans translateY($trans-y); }
+    @if $trans-z { $trans: $trans translateZ($trans-z); }
+  }
+
+  // skew
+  @if $skew-x and $skew-y { $trans: $trans skew($skew-x, $skew-y); }
+  @else {
+    @if $skew-x { $trans: $trans skewX($skew-x); }
+    @if $skew-y { $trans: $trans skewY($skew-y); }
+  }
+
+  // apply it!
+  @include transform($trans, $only3d);
+  @include transform-origin($origin-x, $origin-y, $origin-z, $only3d);
+}
+
+
+// A simplified set of options
+// backwards-compatible with the previous version of the 'transform' mixin
+@mixin simple-transform(
+  $scale:    false,
+  $rotate:   false,
+  $trans-x:  false,
+  $trans-y:  false,
+  $skew-x:   false,
+  $skew-y:   false,
+  $origin-x: false,
+  $origin-y: false
+) {
+  @include create-transform(
+    false,
+    $scale, $scale, false,
+    false, false, $rotate, false,
+    $trans-x, $trans-y, false,
+    $skew-x, $skew-y,
+    $origin-x, $origin-y, false,
+    false
+  );
+}
+
+
+
+// The the user threshold for border-radius support. Defaults to `$graceful-usage-threshold`
+$border-radius-threshold: $graceful-usage-threshold !default;
+
+// The length of a border-radius to be used by default.
+$default-border-radius: 5px !default;
+
+
+// Round all corners by a specific amount, defaults to value of `$default-border-radius`.
+//
+// When two values are passed, the first is the horizontal radius
+// and the second is the vertical radius.
+//
+// Note: webkit does not support shorthand syntax for several corners at once.
+// So in the case where you pass several values only the first will be passed to webkit.
+//
+// Examples:
+//
+//     .simple   { @include border-radius(4px, 4px); }
+//     .compound { @include border-radius(2px 5px, 3px 6px); }
+//     .crazy    { @include border-radius(1px 3px 5px 7px, 2px 4px 6px 8px)}
+//
+// Which generates:
+//
+//     .simple {
+//       -moz-border-radius: 4px / 4px;
+//       -webkit-border-radius: 4px 4px;
+//       border-radius: 4px / 4px; }
+//     
+//     .compound {
+//       -moz-border-radius: 2px 5px / 3px 6px;
+//       -webkit-border-radius: 2px 3px;
+//       border-radius: 2px 5px / 3px 6px; }
+//     
+//     .crazy {
+//       -moz-border-radius: 1px 3px 5px 7px / 2px 4px 6px 8px;
+//       -webkit-border-radius: 1px 2px;
+//       border-radius: 1px 3px 5px 7px / 2px 4px 6px 8px; }
+@mixin border-radius($radius: $default-border-radius, $vertical-radius: false) {
+  @include with-each-prefix(border-radius, $border-radius-threshold) {
+    @if $current-prefix == -webkit {
+      // Legacy Webkit didn't understand the official shorthand syntax for specifying a vertical radius.
+      $legacy-webkit-radius: first-value-of($radius);
+      @if $vertical-radius { $legacy-webkit-radius: append($legacy-webkit-radius, first-value-of($vertical-radius)); }
+      @include prefix-prop(border-radius, $legacy-webkit-radius);
+    } @else {
+      // Official syntax for everyone else
+      @include prefix-prop(border-radius, if($vertical-radius, #{$radius} / #{$vertical-radius}, $radius));
+    }
+  }
+}
+
+
+// Round radius at position by amount.
+//
+// * legal values for `$vert`: `top`, `bottom`
+// * legal values for `$horz`: `left`, `right`
+@mixin border-corner-radius($vert, $horz, $radius: $default-border-radius) {
+  @include with-each-prefix(border-radius, $border-radius-threshold) {
+    @if $current-prefix == -moz {
+      // Support for mozilla's syntax for specifying a corner
+      @include prefix-prop("border-radius-#{$vert}#{$horz}", $radius);
+    } @else {
+      // Official syntax for everyone else
+      @include prefix-prop("border-#{$vert}-#{$horz}-radius", $radius);
+    }
+  }
+}
+
+// Round top-left corner only
+@mixin border-top-left-radius($radius: $default-border-radius) {
+  @include border-corner-radius(top, left, $radius); }
+
+// Round top-right corner only
+@mixin border-top-right-radius($radius: $default-border-radius) {
+  @include border-corner-radius(top, right, $radius); }
+
+// Round bottom-left corner only
+@mixin border-bottom-left-radius($radius: $default-border-radius) {
+  @include border-corner-radius(bottom, left, $radius); }
+
+// Round bottom-right corner only
+@mixin border-bottom-right-radius($radius: $default-border-radius) {
+  @include border-corner-radius(bottom, right, $radius); }
+
+// Round both top corners by amount
+@mixin border-top-radius($radius: $default-border-radius) {
+  @include border-top-left-radius($radius);
+  @include border-top-right-radius($radius); }
+
+// Round both right corners by amount
+@mixin border-right-radius($radius: $default-border-radius) {
+  @include border-top-right-radius($radius);
+  @include border-bottom-right-radius($radius); }
+
+// Round both bottom corners by amount
+@mixin border-bottom-radius($radius: $default-border-radius) {
+  @include border-bottom-left-radius($radius);
+  @include border-bottom-right-radius($radius); }
+
+// Round both left corners by amount
+@mixin border-left-radius($radius: $default-border-radius) {
+  @include border-top-left-radius($radius);
+  @include border-bottom-left-radius($radius); }
+
+
+// The prefixed support threshold for animation.
+// Defaults to the $graceful-usage-threshold.
+$animation-support-threshold: $graceful-usage-threshold !default;
+
+
+// Name of any animation as a string.
+$default-animation-name             : null !default;
+
+// Duration of the entire animation in seconds.
+$default-animation-duration         : null !default;
+
+// Delay for start of animation in seconds.
+$default-animation-delay            : null !default;
+
+// The timing function(s) to be used between keyframes. [ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier($number, $number, $number, $number)]
+$default-animation-timing-function  : null !default;
+
+// The number of times an animation cycle is played. [infinite | $number]
+$default-animation-iteration-count  : null !default;
+
+// Whether or not the animation should play in reverse on alternate cycles. [normal | alternate]
+$default-animation-direction        : null !default;
+
+// What values are applied by the animation outside the time it is executing. [none | forwards | backwards | both]
+$default-animation-fill-mode        : null !default;
+
+// Whether the animation is running or paused. [running | paused]
+$default-animation-play-state       : null !default;
+
+
+// Create a named animation sequence that can be applied to elements later.
+//
+//     $name    - The name of your animation.
+//     @content - The keyframes of the animation.
+@mixin keyframes($name, $deprecated-prefixes...) {
+  $warned: warn-about-useless-prefix-arguments($deprecated-prefixes...);
+
+  @include with-each-prefix(css-animation, $animation-support-threshold) {
+    // It would be nice if we could dynamically construct directive names.
+    @if $current-prefix == -moz    { @-moz-keyframes    #{$name} { @content; } }
+    @if $current-prefix == -webkit { @-webkit-keyframes #{$name} { @content; } }
+    @if $current-prefix == -o      { @-o-keyframes      #{$name} { @content; } }
+    @if $current-prefix == -ms     { @-ms-keyframes     #{$name} { @content; } }
+    @if $current-prefix == null    { @keyframes         #{$name} { @content; } }
+  }
+}
+
+// @private
+@mixin animation-properties($properties) {
+  @include prefixed-properties(css-animation, $animation-support-threshold, $properties);
+}
+
+
+// Apply any number of animation names.
+@mixin animation-name($name...) {
+  $name: set-arglist-default($name, $default-animation-name);
+  @include animation-properties((animation-name: $name));
+}
+
+// Apply any number of animation durations.
+@mixin animation-duration($duration...) {
+  $duration: set-arglist-default($duration, $default-animation-duration);
+  @include animation-properties((animation-duration: $duration));
+}
+
+// Apply any number of animation delays.
+@mixin animation-delay($delay...) {
+  $delay: set-arglist-default($delay, $default-animation-delay);
+  @include animation-properties((animation-delay: $delay));
+}
+
+// Apply any number of animation timing functions.
+@mixin animation-timing-function($function...) {
+  $function: set-arglist-default($function, $default-animation-timing-function);
+  @include animation-properties((animation-timing-function: $function));
+}
+
+// Apply any number of animation iteration counts.
+@mixin animation-iteration-count($count...) {
+  $count: set-arglist-default($count, $default-animation-iteration-count);
+  @include animation-properties((animation-iteration-count: $count));
+}
+
+// Apply any number of animation directions.
+@mixin animation-direction($direction...) {
+  $direction: set-arglist-default($direction, $default-animation-direction);
+  @include animation-properties((animation-direction: $direction));
+}
+
+// Apply any number of animation fill modes.
+@mixin animation-fill-mode($mode...) {
+  $mode: set-arglist-default($mode, $default-animation-fill-mode);
+  @include animation-properties((animation-fill-mode: $mode));
+}
+
+// Apply any number of animation play states.
+@mixin animation-play-state($state...) {
+  $state: set-arglist-default($state, $default-animation-play-state);
+  @include animation-properties((animation-play-state: $state));
+}
+
+// @private
+@function default-animation() {
+  @return compact($default-animation-name
+                  $default-animation-duration
+                  $default-animation-timing-function
+                  $default-animation-delay
+                  $default-animation-iteration-count
+                  $default-animation-direction
+                  $default-animation-fill-mode
+                  $default-animation-play-state);
+}
+
+// Shortcut to apply any number of animations to an element, with all the settings.
+//
+//     $animation... : Name and settings. [<values> | default]
+@mixin animation($animation...) {
+  $animation: if(length($animation) > 0, $animation, default-animation());
+  @include animation-properties((animation: $animation));
+}
+
+
+
+// The prefixed support threshold for box-shadow.
+// Defaults to the $graceful-usage-threshold.
+$box-shadow-support-threshold: $graceful-usage-threshold !default;
+
+
+// The default color for box shadows
+$default-box-shadow-color: #333333 !default;
+
+// The default horizontal offset. Positive is to the right.
+$default-box-shadow-h-offset: 0px !default;
+
+// The default vertical offset. Positive is down.
+$default-box-shadow-v-offset: 0px !default;
+
+// The default blur length.
+$default-box-shadow-blur: 5px !default;
+
+// The default spread length.
+$default-box-shadow-spread: null !default;
+
+// The default shadow inset: inset or null (for standard shadow).
+$default-box-shadow-inset: null !default;
+
+@function default-box-shadow() {
+  @return compact(if($default-box-shadow-inset, inset, null)
+                  $default-box-shadow-h-offset
+                  $default-box-shadow-v-offset
+                  $default-box-shadow-blur
+                  $default-box-shadow-spread
+                  $default-box-shadow-color);
+}
+
+// Provides cross-browser for Webkit, Gecko, and CSS3 box shadows
+// when one or more box shadows are needed.
+// Each shadow argument should adhere to the standard css3 syntax
+// for the box-shadow property.
+@mixin box-shadow($shadow...) {
+  $shadow: set-arglist-default($shadow, default-box-shadow());
+  @include prefixed-properties(css-boxshadow, $box-shadow-support-threshold, (box-shadow: $shadow));
+}
+
+// Provides a single cross-browser CSS box shadow for Webkit, Gecko, and CSS3.
+// Includes default arguments for color, horizontal offset, vertical offset, blur length, spread length, and inset.
+@mixin single-box-shadow(
+  $hoff   : null,
+  $voff   : null,
+  $blur   : null,
+  $spread : null,
+  $color  : null,
+  $inset  : $default-box-shadow-inset
+) {
+  // Handle legacy argument order
+  @if not ($hoff == none or $hoff == null) and type-of($hoff) != number {
+    @warn "The $color argument for single-box-shadow is now the 5th argument instead of the 1st.";
+    $tmp-color: $color;
+    $color: $hoff;
+    $hoff: $voff;
+    $voff: $blur;
+    $blur: $spread;
+    $spread: $tmp-color
+  }
+
+  // Need to set these defaults here instead of the arglist to support the above backwards compat handling
+  @if $hoff   == null { $hoff:   $default-box-shadow-h-offset; }
+  @if $voff   == null { $hoff:   $default-box-shadow-v-offset; }
+  @if $blur   == null { $blur:   $default-box-shadow-blur;     }
+  @if $spread == null { $spread: $default-box-shadow-spread;   }
+  @if $color  == null { $color:  $default-box-shadow-color;    }
+
+  @if not ($inset == true or $inset == false or $inset == null or $inset == inset) {
+    @warn "$inset expected to be true or the inset keyword. Got #{$inset} instead. Using: inset";
+  }
+
+  @if $hoff == none {
+    @include box-shadow(none);
+  } @else {
+    $full   : $hoff $voff;
+    @if $blur   { $full: $full $blur;   }
+    @if $spread { $full: $full $spread; }
+    @if $color  { $full: $full $color;  }
+    @if $inset  { $full: inset $full;   }
+    @include box-shadow($full);
+  }
+}
+
+
+@mixin appearance($appearance) {
+  // There is no caniuse tracking for appearance.
+  $appearance: unquote($appearance);
+  @include with-prefix(-moz)    {    -moz-appearance: $appearance; }
+  @include with-prefix(-webkit) { -webkit-appearance: $appearance; }
+}

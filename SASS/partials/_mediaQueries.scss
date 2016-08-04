@@ -1,0 +1,151 @@
+﻿
+
+$mobile-sm: 400px;
+$mobile-sm-only: $mobile-sm - 1;
+
+
+$mobile: 767px;
+$mobile-lrg: 520px;
+$tablet: $mobile + 1;
+$device:1024px;
+$desktop: 1025px;
+
+
+$ipad: 960px;
+$iphone4-w: 320px;
+$iphone4-h: 480px;
+$iphone5-w: 320px;
+$iphone5-h: 520px;
+$iphone6-w: 375px;
+$iphone6-h: 667px;
+$iphone6plus-w: 414px;
+$iphone6plus-h: 736px;
+
+
+@mixin media ($type) {
+
+    @if $type == mobile {
+        @media only screen and (max-width: #{$mobile}) {
+            @content;
+        }
+    }
+    @if $type == mobile-sm-only {
+        @media only screen and (max-width: #{$mobile-sm-only}) {
+            @content;
+        }
+    }
+
+    @else if $type == mobile-sm {
+        @media only screen and (min-width: #{$mobile-sm}) {
+            @content;
+        }
+    }
+
+    @else if $type == mobile-lrg {
+        @media only screen and (min-width: #{$mobile-lrg}) {
+            @content;
+        }
+    }
+    
+    @else if $type == tablet {
+        @media only screen and (min-width: #{$tablet}) {
+            @content;
+        }
+    }
+
+    @else if $type == tablet-max {
+        @media only screen and (max-width: #{$tablet}) {
+            @content;
+        }
+    }
+
+    @else if $type == ipad {
+        @media only screen and (min-width: #{$ipad}) {
+            @content;
+        }
+    }
+
+    @else if $type == desktop {
+        @media only screen and (min-width: #{$desktop}) {
+            @content;
+        }
+    }
+    
+    @else if $type == device {
+        @media only screen and (max-device-width: #{$device}) {
+            @content;
+        }
+    }
+
+    @else if $type == retina {
+        @media
+            only screen and (-webkit-min-device-pixel-ratio: 2),
+            only screen and (min--moz-device-pixel-ratio: 2),
+            only screen and (-o-min-device-pixel-ratio: 2/1),
+            only screen and (min-device-pixel-ratio: 2),
+            only screen and (min-resolution: 192dpi),
+            only screen and (min-resolution: 2dppx) {
+                @content;
+        }
+    }
+
+    @else if $type == print {
+        @media print {
+            @content;
+        }
+    }
+
+    @else if $type == iphone4portrait {
+        @media only screen and (min-device-width: #{$iphone4-w}) and (max-device-width: #{$iphone4-h}) and (orientation: portrait) {
+            @content
+        }
+    }
+
+    @else if $type == iphone4landscape {
+        @media only screen and (min-device-width: #{$iphone4-w}) and (max-device-width: #{$iphone4-h}) and (orientation: landscape) {
+            @content
+        }
+    }
+
+    @else if $type == iphone5portrait {
+        @media only screen and (min-device-width: #{$iphone5-w}) and (max-device-width: #{$iphone5-h}) and (orientation: portrait) {
+            @content
+        }
+    }
+
+    @else if $type == iphone5landscape {
+        @media only screen and (min-device-width: #{$iphone5-w}) and (max-device-width: #{$iphone5-h}) and (orientation: landscape) {
+            @content
+        }
+    }
+    
+    @else if $type == iphone6portrait {
+        @media only screen and (min-device-width : #{$iphone6-w}) and (max-device-width: #{$iphone6-h}) and (orientation : portrait) {
+            @content
+        }
+    }
+
+    @else if $type == iphone6landscape {
+        @media only screen and (min-device-width : #{$iphone6-w}) and (max-device-width: #{$iphone6-h}) and (orientation : landscape) {
+            @content
+        }
+    }
+
+    @else if $type == iphone6plusportrait {
+        @media only screen and (min-device-width : #{$iphone6plus-w}) and (max-device-width: #{$iphone6plus-h}) and (orientation : portrait) {
+            @content
+        }
+    }
+
+    @else if $type == iphone6pluslandscape {
+        @media only screen and (min-device-width : #{$iphone6plus-w}) and (max-device-width: #{$iphone6plus-h}) and (orientation : landscape) {
+            @content
+        }
+    }
+    @else {
+        @media only screen and (min-width : #{$type}) {
+            @content
+        }
+    }
+}
+

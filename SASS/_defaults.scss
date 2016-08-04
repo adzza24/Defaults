@@ -1,0 +1,43 @@
+﻿@import "susy";
+@import "partials/mediaQueries";
+@import "compass";
+@import "partials/mixins";
+@import "partials/easings";
+
+//Fonts
+$font-family-main:  "source-sans-pro", 'helvetica', 'arial', sans-serif;
+
+    //Font weights
+    $font-weight-light: 300;
+    $font-weight-regular: 400;
+    $font-weight-semibold: 600;
+    $font-weight-bold: 700; 
+
+    //font sizes
+    $xxl-h-font: 34px;
+    $xl-h-font: 30px;
+    $large-h-font: 26px;
+    $medium-h-font: 22px;
+    $small-h-font: 18px;
+    $body-font: 14px;
+    $xs-font: 12px;
+
+    %icomoon { font-family: 'icomoon' !important; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+//colours
+$clr-white:#FFF;
+$clr-grey-dark:#414042;
+$clr-grey-light:#DEDFDF;
+$clr-blue-dark:#044C73;
+$clr-blue-light:#C1DFEE;
+$clr-cream:#ede5d2;
+$clr-cream-opacity-20:rgba(237,229,210, 0.2);
+$clr-purple-dark:#1E0221;
+$clr-purple-light:#550C3E;
+$default-text:#000;
+
+//defaults
+$margin-bottom-base:10;
+$padding-bottom-base:10;
+$default-transition: all 0.2s ease;
+

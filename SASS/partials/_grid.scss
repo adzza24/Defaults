@@ -1,0 +1,122 @@
+﻿/* Copyright (c) 2016 Adam Anthony */
+$susy: (
+  math: fluid,
+  gutter-position: inside,
+  container: 100%,
+  columns: 12,
+  gutters: .2,
+  gutter-override: 8%,
+  column-width: false,
+  global-box-sizing: border-box
+);
+
+.container {
+    @include container();
+    width: 100%;
+    position: relative;
+    max-width: 1200px;
+
+    &.marginated {
+        margin-bottom: 20px;
+        @include media(tablet) { margin-bottom: 50px; }
+    }
+
+    &.narrow { width: 70%; }
+    &.full { max-width: 100%; }
+
+    &.padded { padding-bottom: 50px; }
+
+    .one-third {
+        width: 100%;
+        padding-left: gutter();
+        padding-right: gutter();
+
+
+        @include media (tablet) {
+            @include span(1 of 2);
+        }
+
+        @include media (desktop) {
+            @include span(1 of 3);
+        }
+    }
+
+    .two-thirds {
+        width: 100%;
+        padding-left: gutter(4%);
+        padding-right: gutter(4%);
+
+        @include media (tablet) {
+            @include span(1 of 2);
+            padding-left: gutter();
+            padding-right: gutter();
+        }
+
+        @include media (desktop) {
+            @include span(2 of 3);
+        }
+    }
+
+    %col {
+        @include span(12);
+        position: relative;
+        @include gutters(8%);
+
+        @include media(tablet) {
+            @include gutters(4%);
+        }
+    }
+
+    img { width:100%; max-width: 100%; height: auto; }
+
+    @for $i from 1 through 12 {
+        .col-#{$i} {
+            @extend %col;
+            width: span($i of 12 4%);
+        }
+        .push-#{$i} { position: relative; left: span($i of 12); }
+        .pull-#{$i} { position: relative; left: - span($i of 12); }
+    }
+
+
+    @for $i from 1 through 12 {
+        .col-t-#{$i} {
+            @extend %col;
+            @include media (tablet) { width: span($i of 12); }
+        }
+
+        @include media (tablet) {
+            .push-t-#{$i} { position: relative; left: span($i of 12); }
+            .pull-t-#{$i} { position: relative; left: - span($i of 12); }
+        }
+    }
+
+    @for $i from 1 through 12 {
+
+        .col-d-#{$i} {
+            @extend %col;
+            @include media (desktop) { width: span($i of 12); }
+        }
+
+        @include media (desktop) {
+            .push-d-#{$i} { position: relative; left: span($i of 12); }
+            .pull-d-#{$i} { position: relative; left: - span($i of 12); }
+        }
+    }
+
+    .alpha { margin-left: 0; padding-left: 0!important; }
+    .omega { margin-right: 0; padding-right: 0!important; }
+    @include media(mobile) {
+        .alpha-m { margin-left: 0; padding-left: 0; }
+        .omega-m { margin-right: 0; padding-right: 0; }
+    }
+    @include media(tablet) {
+        .alpha-t { margin-left: 0; padding-left: 0; }
+        .omega-t { margin-right: 0; padding-right: 0; }
+    }
+    @include media(desktop) {
+        .alpha-d { margin-left: 0; padding-left: 0; }
+        .omega-d { margin-right: 0; padding-right: 0; }
+    }
+}
+
